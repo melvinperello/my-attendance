@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
     "strictPropertyInitialization": false,
     "types": ["reflect-metadata", "node"],
     "target": "es2020",

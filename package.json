@@ -4,23 +4,26 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon ./src/server.ts",
+    "start": "nodemon server.ts",
     "test": "npx @google-cloud/functions-framework --target=fastifyFunction",
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
-    "postbuild": "cd dist && bestzip index.zip index.js*"
+    "postbuild": "cp -R templates dist/ && cd dist && bestzip index.zip *"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/view": "^7.1.1",
     "@google-cloud/firestore": "^6.4.1",
+    "ejs": "^3.1.8",
     "fastify": "^4.9.2",
     "inversify": "^6.0.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@google-cloud/functions-framework": "^3.1.2",
+    "@types/ejs": "^3.1.1",
     "@types/node": "^18.7.6",
     "bestzip": "^2.2.1",
     "esbuild": "^0.14.51",
