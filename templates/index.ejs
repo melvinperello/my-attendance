@@ -1,12 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Google is fun!</title>
-  </head>
+  <%- include('./partials/head.ejs',{title:"my-attendance"}) -%>
   <body>
-    <h1><%= text %></h1>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img
+            src="/public/images/logo-128.png"
+            alt=""
+            width="30"
+            height="24"
+            class="d-inline-block align-text-top"
+          />
+          my-attendance
+        </a>
+      </div>
+    </nav>
+    <main>
+      <div class="container mt-3">
+        <div class="row justify-content-center">
+          <div class="col col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <form>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label"
+                      >username</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="exampleInputEmail1"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label"
+                      >code</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="exampleInputPassword1"
+                      aria-describedby="emailHelp"
+                    />
+                    <div id="emailHelp" class="form-text">
+                      Open your authenticator app to get the code.
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
