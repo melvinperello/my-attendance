@@ -6,25 +6,36 @@
     <main>
       <div class="container mt-3">
         <div class="row justify-content-center">
-          <div class="col col-sm-4">
+          <div class="col col-sm-5">
             <div class="card">
               <div class="card-body">
                 <!--  -->
+                <div
+                  class="d-flex justify-content-center flex-column text-center"
+                >
+                  <span class="text-center"
+                    ><span class="fw-bold fst-italic">step 1 - </span> scan
+                    using authenticator app</span
+                  >
+                  <div class="mt-2 alert alert-secondary" role="alert">
+                    <span class="fst-italic fs-6">enter manually</span>
+                    <div class="fw-bold pt-2"><%= otpString %></div>
+                  </div>
+
+                  <img
+                    class="img-fluid"
+                    src="<%= otpImage %>"
+                    alt="Secured Image"
+                  />
+                </div>
                 <form id="frm_login">
                   <div class="mb-3">
-                    <label for="txt_username" class="form-label"
-                      >username</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="txt_username"
-                      id="txt_username"
-                      required
-                    />
-                  </div>
-                  <div class="mb-3">
-                    <label for="txt_code" class="form-label">code</label>
+                    <div class="d-flex justify-content-center text-center">
+                      <label for="txt_code" class="form-label"
+                        ><span class="fw-bold fst-italic">step 2 - </span>enter
+                        the code from the authenticator app.
+                      </label>
+                    </div>
                     <input
                       type="text"
                       class="form-control"
@@ -34,9 +45,8 @@
                       autocomplete="off"
                       required
                     />
-                    <div id="lbl_code" class="form-text">
-                      Open your authenticator app to get the code, or
-                      <a href="/register">register</a>.
+                    <div id="lbl_code" class="form-text text-center">
+                      Please note that each code expires after a certain time.
                     </div>
                   </div>
                   <div class="d-grid gap-2">
@@ -45,7 +55,7 @@
                       type="submit"
                       class="btn btn-primary"
                     >
-                      login
+                      register
                     </button>
                   </div>
                 </form>
@@ -70,10 +80,9 @@
             }, {});
           // AJAX HERE
           $.ajax({
-            url: "/api/login",
+            url: "/api/register",
             type: "POST",
             data: JSON.stringify({
-              username: data.txt_username,
               code: data.txt_code,
             }),
             contentType: "application/json; charset=utf-8",
