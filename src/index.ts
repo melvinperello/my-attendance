@@ -3,6 +3,7 @@ import ejs from "ejs";
 import path from "path";
 import QRCode from "qrcode";
 import { authenticator } from "otplib";
+import { getDoc } from "./fun";
 const {Firestore} = require('@google-cloud/firestore');
 const firestore = new Firestore();
 const { PLATFORM } = process.env;
@@ -35,6 +36,8 @@ app.get("/register", async (request, reply: any) => {
   const document = firestore.doc('melvin/auth');
 
   const authDoc = await document.get();
+
+  const doc = await getDoc('melvin/auth')
   
 
   if(authDoc.exists){
