@@ -2,92 +2,83 @@
 <html lang="en">
   <%- include('./partials/head.ejs',{title:"my-attendance"}) -%>
   <body>
-    <nav class="navbar navbar-dark bg-dark">
-      <div class="container">
-        <div style="display: flex; width: 100%">
-          <div style="flex: 1">
-            <a class="navbar-brand" href="#">
-              <img
-                src="/public/images/logo-128.png"
-                alt=""
-                width="30"
-                height="24"
-                class="d-inline-block align-text-top"
-              />
-              my-attendance
-            </a>
-          </div>
-          <div style="color: #ffffff">
-            <div
-              style="
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 0.25rem;
-              "
-            >
-              <sup style="font-size: xx-small">powered by</sup>
-              <img
-                src="/public/images/gcp-128.png"
-                alt=""
-                width="25"
-                height="25"
-                class="d-inline-block align-text-top"
-              />
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  padding-left: 0.125rem;
-                "
-              >
-                <span style="font-size: x-small">Google Cloud</span>
-                <span style="font-size: x-small">Platform</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <%- include('./partials/nav.ejs') -%>
     <main>
       <div class="container mt-3">
         <div class="row justify-content-center">
           <div class="col col-sm-4">
             <div class="card">
               <div class="card-body">
-                <form>
+                <!--  -->
+                <form id="frm_login">
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label"
+                    <label for="txt_username" class="form-label"
                       >username</label
                     >
                     <input
                       type="text"
                       class="form-control"
-                      id="exampleInputEmail1"
+                      name="txt_username"
+                      id="txt_username"
+                      required
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label"
-                      >code</label
-                    >
+                    <label for="txt_code" class="form-label">code</label>
                     <input
                       type="text"
                       class="form-control"
-                      id="exampleInputPassword1"
-                      aria-describedby="emailHelp"
+                      id="txt_code"
+                      name="txt_code"
+                      aria-describedby="lbl_code"
+                      autocomplete="off"
+                      required
                     />
-                    <div id="emailHelp" class="form-text">
+                    <div id="lbl_code" class="form-text">
                       Open your authenticator app to get the code.
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-primary">Login</button>
+                  <button id="btn_submit" type="submit" class="btn btn-primary">
+                    Login
+                  </button>
                 </form>
+                <!--  -->
               </div>
             </div>
           </div>
         </div>
       </div>
     </main>
+
+    <script>
+      $(function () {
+        $("#frm_login").submit(function (event) {
+          event.preventDefault();
+          $("#btn_submit").prop("disabled", true);
+          const data = $("#frm_login")
+            .serializeArray()
+            .reduce(function (obj, item) {
+              obj[item.name] = item.value;
+              return obj;
+            }, {});
+          // AJAX HERE
+          $.ajax({
+            url: "/login",
+            type: "POST",
+            data: JSON.stringify({
+              username: data.txt_username,
+              code: data.txt_code,
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (res) {
+              const data = res.message;
+            },
+          }).always(function () {
+            $("#btn_submit").prop("disabled", false);
+          });
+        });
+      });
+    </script>
   </body>
 </html>
