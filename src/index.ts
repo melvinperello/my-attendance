@@ -7,7 +7,7 @@ const { PLATFORM, JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, JWT_KEY_PHRASE } =
   process.env;
 
 const app = fastify({
-  logger: false, // you can also define the level passing an object configuration to logger: {level: 'debug'}
+  logger: true, // you can also define the level passing an object configuration to logger: {level: 'debug'}
 });
 app.register(require("@fastify/jwt"), {
   secret: {
@@ -54,10 +54,10 @@ app.get("/pre-register/:username", async (request: any, reply: any) => {
   const { username } = request.params;
   const data = await preRegister(username);
   if (data.code !== 200) {
-    reply.code(data.code).send(data);
+    return reply.code(data.code).send(data);
   }
   return reply.code(data.code).view("/templates/pre-register.ejs", {
-    ...data,
+    ...data.data,
     username: username,
   });
 });
