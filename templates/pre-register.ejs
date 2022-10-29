@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/head.ejs',{title:"my-attendance"}) -%>
+  <%- include('./partials/head.ejs',{title:"your-attendance - Register"}) -%>
   <body>
     <%- include('./partials/nav.ejs') -%>
     <main>
@@ -19,16 +19,31 @@
                   >
                   <div class="mt-2 alert alert-secondary" role="alert">
                     <span class="fst-italic fs-6">enter manually</span>
-                    <div class="fw-bold pt-2"><%= otpString %></div>
+                    <div class="fw-bold pt-2"><%= secretString %></div>
                   </div>
 
                   <img
                     class="img-fluid"
-                    src="<%= otpImage %>"
+                    src="<%= secretImageString %>"
                     alt="Secured Image"
                   />
                 </div>
                 <form id="frm_login">
+                  <div class="mb-3 d-none">
+                    <label for="txt_username" class="form-label"
+                      >username</label
+                    >
+                    <input
+                      readonly
+                      value="<%= username %>"
+                      type="text"
+                      class="form-control"
+                      name="txt_username"
+                      id="txt_username"
+                      placeholder="username"
+                      required
+                    />
+                  </div>
                   <div class="mb-3">
                     <div class="d-flex justify-content-center text-center">
                       <label for="txt_code" class="form-label"
@@ -49,6 +64,7 @@
                       Please note that each code expires after a certain time.
                     </div>
                   </div>
+     
                   <div class="d-grid gap-2">
                     <button
                       id="btn_submit"
@@ -62,6 +78,12 @@
                 <!--  -->
               </div>
             </div>
+            <div id="msg_not_exists" class="alert alert-danger d-flex align-items-center mt-2" role="alert">
+              <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
+              <div>
+                Your are wrong!
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -69,6 +91,7 @@
 
     <script>
       $(function () {
+        $('#msg_not_exists').css('visibility','hidden');
         $("#frm_login").submit(function (event) {
           event.preventDefault();
           $("#btn_submit").prop("disabled", true);
@@ -84,13 +107,21 @@
             type: "POST",
             data: JSON.stringify({
               code: data.txt_code,
+              username: data.txt_username,
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (res) {
               const data = res.message;
             },
-          }).always(function () {
+          }).done(function(res) {
+            if(res.code === 200){
+              window.location.href = "/login/"+res.data.username;
+            }
+          }).fail(function(xhr) {
+              $('#msg_not_exists').css('visibility','visible');
+          })
+          .always(function() {
             $("#btn_submit").prop("disabled", false);
           });
         });

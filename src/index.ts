@@ -3,7 +3,7 @@ import ejs from "ejs";
 import path from "path";
 import QRCode from "qrcode";
 import { authenticator } from "otplib";
-import { getDoc } from "./fun";
+import { login,check,preRegister,register } from "./fun";
 const {Firestore} = require('@google-cloud/firestore');
 const firestore = new Firestore();
 const { PLATFORM } = process.env;
@@ -29,82 +29,51 @@ if (PLATFORM === "gcp") {
 }
 //---------------------------------------------
 app.get("/", async (request, reply: any) => {
-  return reply.view("/templates/index.ejs", { text: "Google is Fun!" });
+  return reply.view("/templates/index.ejs");
 });
 
-app.get("/register", async (request, reply: any) => {
-  const document = firestore.doc('melvin/auth');
-
-  const authDoc = await document.get();
-
-  const doc = await getDoc('melvin/auth')
-  
-
-  if(authDoc.exists){
-    const {verified} = authDoc.data();
-    // user not verified.
-    if(!verified){
-      // create new secret.
-      const secret = authenticator.generateSecret(); // base32 encoded hex secret key
-      // update the secret in database.
-      await document.update({
-        secret: secret,
-      });
-      // create QR Image.
-      const otpauth = authenticator.keyuri(
-        "melvin",
-        "my-attendance",
-        secret
-      );
-      // create image string.
-      const qrCode = await QRCode.toDataURL(otpauth, {
-        errorCorrectionLevel: "H",
-        width: 200,
-        scale: 10,
-        margin: 2,
-      });
-      // display site.
-      return reply.view("/templates/register.ejs", {
-        otpImage: qrCode,
-        otpString: secret,
-      });
-    }
+app.get("/login/:username", async (request:any, reply: any) => {
+  const { username } = request.params;
+  const data = await check(username)
+  if(data.message !== "ok" && data.message !== "user_already_associated"){
+    reply.code(data.code).send(data);
   }
+  return reply.view("/templates/login.ejs",{username: username});
+});
+
+app.get("/pre-register/:username", async (request:any, reply: any) => {
+  const { username } = request.params;
+  const data = await preRegister(username)
+  if(data.code !== 200){
+    reply.code(data.code).send(data);
+  }
+  return reply.code(data.code).view("/templates/pre-register.ejs", {
+    ...data.data,
+    username:username
+  });
+});
+
+
+// ---------------------------------------------------------------------------------------
+// API's
+// ---------------------------------------------------------------------------------------
+app.post("/api/check", async (request: any, reply: any) => {
+  const {username} = request.body;
+  const data = await check(username)
+  reply.code(data.code).send(data);
 });
 
 app.post("/api/login", async (request: any, reply: any) => {
-  const {username,code} = request.body;
-  const document = firestore.doc(`${username}/auth`);
-  const authDoc = await document.get();
-  if(authDoc.exists){
-    const {secret} = authDoc.data();
-    const ok = authenticator.check(code, secret);
-    if(ok){
-      return reply.send({ message: "ok" });
-    }else{
-      return reply.send({ message: "not_ok" });
-    }
-  }else{
-    return reply.send({ message: "not_found" });
-  }
+  const {code,username} = request.body;
+  const data = await login(username,code)
+  reply.code(data.code).send(data);
 });
 
 app.post("/api/register", async (request: any, reply: any) => {
-  const { code } = request.body;
-  // const secret = authenticator.generateSecret(); // base32 encoded hex secret key // AQRHIXRGFVYHUGQC
-  const document = firestore.doc('melvin/auth');
-  const authDoc = await document.get();
-  if(authDoc.exists){
-    const {secret} = authDoc.data();
-    const ok = authenticator.check(code, secret);
-    if(ok){
-      await document.update({
-        verified: true,
-      });
-      return reply.send({ message: "ok" });
-    }
-  }
-  return reply.send({ message: "not_ok" });
+  const { code,username } = request.body;
+  const data = await register(username,code);
+  reply.code(data.code).send(data);
+  
 });
 
 //---------------------------------------------
