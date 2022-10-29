@@ -53,16 +53,16 @@
                   </div>
                 </form>
                 <!--  -->
-                
               </div>
-         
             </div>
             <!--  -->
-            <div id="msg_not_exists" class="alert alert-danger d-flex align-items-center mt-2" role="alert">
+            <div
+              id="msg_not_exists"
+              class="alert alert-danger d-flex align-items-center mt-2"
+              role="alert"
+            >
               <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
-              <div>
-                Your are wrong!
-              </div>
+              <div>Wrong code.</div>
             </div>
           </div>
         </div>
@@ -71,7 +71,7 @@
 
     <script>
       $(function () {
-        $('#msg_not_exists').css('visibility','hidden');
+        $("#msg_not_exists").css("visibility", "hidden");
         $("#frm_login").submit(function (event) {
           event.preventDefault();
           $("#btn_submit").prop("disabled", true);
@@ -90,17 +90,19 @@
               username: data.txt_username,
             }),
             contentType: "application/json; charset=utf-8",
-            dataType: "json"
-          }).done(function(res) {
-            console.log(res)
-            alert("Correct Code")
-          }).fail(function(xhr) {
-            console.log(xhr)
-            alert("Wrong Code")
+            dataType: "json",
           })
-          .always(function() {
-            $("#btn_submit").prop("disabled", false);
-          });
+            .done(function (res) {
+              const date = new Date();
+              const minutes = 15;
+              date.setTime(date.getTime() + minutes * 60 * 1000);
+              $.cookie("token", res.data.token, { expires: date, path: "/" });
+              window.location.href = "/main?token=" + res.data.token;
+            })
+            .fail(function (xhr) {
+              $("#msg_not_exists").css("visibility", "visible");
+              $("#btn_submit").prop("disabled", false);
+            });
         });
       });
     </script>

@@ -64,7 +64,7 @@
                       Please note that each code expires after a certain time.
                     </div>
                   </div>
-     
+
                   <div class="d-grid gap-2">
                     <button
                       id="btn_submit"
@@ -78,11 +78,13 @@
                 <!--  -->
               </div>
             </div>
-            <div id="msg_not_exists" class="alert alert-danger d-flex align-items-center mt-2" role="alert">
+            <div
+              id="msg_not_exists"
+              class="alert alert-danger d-flex align-items-center mt-2"
+              role="alert"
+            >
               <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
-              <div>
-                Your are wrong!
-              </div>
+              <div>Your are wrong!</div>
             </div>
           </div>
         </div>
@@ -91,7 +93,7 @@
 
     <script>
       $(function () {
-        $('#msg_not_exists').css('visibility','hidden');
+        $("#msg_not_exists").css("visibility", "hidden");
         $("#frm_login").submit(function (event) {
           event.preventDefault();
           $("#btn_submit").prop("disabled", true);
@@ -114,16 +116,16 @@
             success: function (res) {
               const data = res.message;
             },
-          }).done(function(res) {
-            if(res.code === 200){
-              window.location.href = "/login/"+res.data.username;
-            }
-          }).fail(function(xhr) {
-              $('#msg_not_exists').css('visibility','visible');
           })
-          .always(function() {
-            $("#btn_submit").prop("disabled", false);
-          });
+            .done(function (res) {
+              if (res.code === 200) {
+                window.location.href = "/login/" + res.data.username;
+              }
+            })
+            .fail(function (xhr) {
+              $("#msg_not_exists").css("visibility", "visible");
+              $("#btn_submit").prop("disabled", false);
+            });
         });
       });
     </script>

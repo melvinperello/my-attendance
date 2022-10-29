@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head.ejs',{title:"our-attendance - Main"}) -%>
+  <body>
+    <%- include('./partials/nav.ejs') -%>
+    <main>
+      <div class="container mt-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="row justify-content-center">
+              <div class="col col-sm-12 col-md-6">
+                <!--  -->
+                <p id="lbl_time" class="display-1 fw-bold text-center">Time</p>
+                <p id="lbl_date" class="display-6 text-center">Date</p>
+
+                <div class="alert alert-info text-center" role="alert">
+                  <strong>Hi melvin!</strong> Please click the button with your
+                  status.
+                </div>
+
+                <div
+                  class="d-grid gap-2"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                >
+                  <button
+                    id="btn_present"
+                    class="btn btn-success btn-lg"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                  >
+                    <i class="bi bi-calendar2-check"></i> Present
+                  </button>
+                  <hr />
+                  <button id="btn_sl" class="btn btn-dark btn-lg" type="button">
+                    <i class="bi bi-bandaid"></i> Sick Leave
+                  </button>
+                  <button
+                    id="btn_el"
+                    class="btn btn-danger btn-lg"
+                    type="button"
+                  >
+                    <i class="bi bi-activity"></i> Emergency Leave
+                  </button>
+                </div>
+                <!--  -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--  -->
+      </div>
+    </main>
+
+    <script>
+      $(function () {
+        $("#lbl_date").text(moment().format("MMMM DD, YYYY"));
+        $("#lbl_time").text(moment().format("h:mm a"));
+        const timer = setInterval(function () {
+          $("#lbl_date").text(moment().format("MMMM DD, YYYY"));
+          $("#lbl_time").text(moment().format("h:mm a"));
+        }, 1000);
+
+        //
+        $("#btn_attendance_confirm").click(function () {
+          $("#btn_present").prop("disabled", true);
+          $("#btn_sl").prop("disabled", true);
+          $("#btn_el").prop("disabled", true);
+        });
+      });
+    </script>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Please confirm that you selected <strong>Present</strong>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              No
+            </button>
+            <button
+              id="btn_attendance_confirm"
+              data-bs-dismiss="modal"
+              type="button"
+              class="btn btn-primary"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

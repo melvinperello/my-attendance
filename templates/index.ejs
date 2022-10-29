@@ -35,16 +35,16 @@
                   </div>
                 </form>
                 <!--  -->
-                
               </div>
-         
             </div>
             <!--  -->
-            <div id="msg_not_exists" class="alert alert-warning d-flex align-items-center mt-2" role="alert">
+            <div
+              id="msg_not_exists"
+              class="alert alert-warning d-flex align-items-center mt-2"
+              role="alert"
+            >
               <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
-              <div>
-                You do not belong here, bye!
-              </div>
+              <div>You do not belong here, bye!</div>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@
 
     <script>
       $(function () {
-        $('#msg_not_exists').css('visibility','hidden');
+        $("#msg_not_exists").css("visibility", "hidden");
         $("#frm_login").submit(function (event) {
           event.preventDefault();
           $("#btn_submit").prop("disabled", true);
@@ -71,21 +71,22 @@
               username: data.txt_username,
             }),
             contentType: "application/json; charset=utf-8",
-            dataType: "json"
-          }).done(function(res) {
-            if(res.code === 200){
-              window.location.href = "/pre-register/"+res.data.username;
-            }
-          }).fail(function(xhr) {
-            if(xhr.status === 404){
-              $('#msg_not_exists').css('visibility','visible');
-            }else if(xhr.status === 400){
-              window.location.href = "/login/"+xhr.responseJSON.data.username;
-            }
+            dataType: "json",
           })
-          .always(function() {
-            $("#btn_submit").prop("disabled", false);
-          });
+            .done(function (res) {
+              if (res.code === 200) {
+                window.location.href = "/pre-register/" + res.data.username;
+              }
+            })
+            .fail(function (xhr) {
+              if (xhr.status === 404) {
+                $("#msg_not_exists").css("visibility", "visible");
+              } else if (xhr.status === 400) {
+                window.location.href =
+                  "/login/" + xhr.responseJSON.data.username;
+              }
+              $("#btn_submit").prop("disabled", false);
+            });
         });
       });
     </script>
