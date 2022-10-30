@@ -32,6 +32,10 @@ app.register(require("@fastify/static"), {
   maxAge: PLATFORM ? 300000: 0,
 });
 
+app.get('/robots.txt', function (req, reply:any) {
+  reply.sendFile('robots.txt') // serving path.join(__dirname, 'public', 'myHtml.html') directly
+})
+
 if (PLATFORM === "gcp") {
   app.addContentTypeParser("application/json", {}, (req, body: any, done) => {
     done(null, body.body);
@@ -48,9 +52,9 @@ app.register(
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "DENY",
         "Referrer-Policy": "no-referrer",
+        "Permissions-Policy":"geolocation=(), microphone=()"
       });
     });
-
 
     isolated.get("/", async (request, reply: any) => {
       return reply.view("/templates/index.ejs");
