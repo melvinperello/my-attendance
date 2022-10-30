@@ -50,7 +50,7 @@ app.addHook("onSend", async function (request, reply) {
   reply.headers({
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     "Content-Security-Policy":
-      "default-src 'self' cdn.jsdelivr.net code.jquery.com",
+      "default-src 'self' cdn.jsdelivr.net code.jquery.com; img-src 'self' data:;",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "no-referrer",
