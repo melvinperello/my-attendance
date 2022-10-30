@@ -32,15 +32,17 @@ app.register(require("@fastify/static"), {
   maxAge: PLATFORM ? 300000: 0,
 });
 
-app.get('/robots.txt', function (req, reply:any) {
-  reply.sendFile('robots.txt') // serving path.join(__dirname, 'public', 'myHtml.html') directly
-})
+
 
 if (PLATFORM === "gcp") {
   app.addContentTypeParser("application/json", {}, (req, body: any, done) => {
     done(null, body.body);
   });
 }
+
+app.get('/robots.txt', function (req, reply:any) {
+  reply.code(200).header("Cache-Control","max-age:300").header("Content-Type","text/plain; charset=utf-8").send(`User-agent: *\nDisallow: /`)
+})
 
 app.register(
   function (isolated, opts, done) {
@@ -52,7 +54,8 @@ app.register(
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "DENY",
         "Referrer-Policy": "no-referrer",
-        "Permissions-Policy":"geolocation=(), microphone=()"
+        "Permissions-Policy":"geolocation=(), microphone=()",
+        "X-XSS-Protection":"1; mode=block"
       });
     });
 
