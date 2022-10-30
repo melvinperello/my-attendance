@@ -1,5 +1,6 @@
 import { authenticator } from "otplib";
 import QRCode from "qrcode";
+import moment from "moment";
 const {Firestore} = require('@google-cloud/firestore');
 const firestore = new Firestore();
 
@@ -22,6 +23,84 @@ const getAuthDoc = async (username:string) =>{
 const updateAuthDoc = async (username:string,data:any) =>{
     const document = firestore.doc(`authorization/${username}`);
     await document.update(data);
+}
+
+
+
+export const logAttendance = async (username:string,group:string,status:string)=>{
+    const current = moment().format("YYYY-MM-DD")
+    const timein = moment().format("HH:mm");
+    const docName = `attendance/${current}/${group}/${username}`;
+
+
+    const doc = await getDoc(docName);
+    if(doc){
+        return {
+            code: 400,
+            message: "already_logged",
+            data: doc.data()
+        }
+    }
+    const document = firestore.doc(docName);
+    const data = await document.set({
+        status: status,
+        timein: timein
+    });
+    return {
+        code: 201,
+        message: "created",
+        data: data
+    }
+}
+
+
+export const checkAttendance = async (username:string,group:string)=>{
+    const current = moment().format("YYYY-MM-DD")
+    const docName = `attendance/${current}/${group}/${username}`;
+    const doc = await getDoc(docName);
+    if(doc){
+        return {
+            code: 200,
+            message: "already_logged",
+            data: doc.data()
+        }
+    }else{
+        return {
+            code: 404,
+            message: "no_attendance",
+            data: null
+        }
+    }
+}
+
+export const groupie = async (group:string)=>{
+    const current = moment().format("YYYY-MM-DD")
+    const docName = `attendance/${current}/${group}`;
+    const collectionReference = firestore.collection(docName);
+    const attendances = await collectionReference
+    .orderBy('timein')
+    .get();
+    const attendancesData = attendances.docs.map((d:any) => {
+        const thisDocData = d.data();
+        let label = ""
+        if(thisDocData.status === "PRESENT"){
+            label="success"
+        } else  if(thisDocData.status === "SICK_LEAVE"){
+            label="dark"
+        }else  if(thisDocData.status === "EMERGENCY_LEAVE"){
+            label="danger"
+        }
+        return {
+            ...thisDocData,
+            name:d.id,
+            label: label
+        }
+    });
+    return {
+        code: 200,
+        message: "ok",
+        data: attendancesData
+    }
 }
 
 

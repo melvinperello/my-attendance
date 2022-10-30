@@ -13,11 +13,12 @@
                 <p id="lbl_time" class="display-1 fw-bold text-center">Time</p>
                 <p id="lbl_date" class="display-6 text-center">Date</p>
 
+                
+                <%if (code !== 200) { %>
                 <div class="alert alert-info text-center" role="alert">
-                  <strong>Hi melvin!</strong> Please click the button with your
+                  <strong>Hi <%= username %>!</strong> Please click the button with your
                   status.
                 </div>
-
                 <div
                   class="d-grid gap-2"
                   data-toggle="modal"
@@ -33,17 +34,74 @@
                     <i class="bi bi-calendar2-check"></i> Present
                   </button>
                   <hr />
-                  <button id="btn_sl" class="btn btn-dark btn-lg" type="button">
+                  <button id="btn_sl" class="btn btn-dark btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="bi bi-bandaid"></i> Sick Leave
                   </button>
                   <button
                     id="btn_el"
                     class="btn btn-danger btn-lg"
                     type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
                   >
                     <i class="bi bi-activity"></i> Emergency Leave
                   </button>
                 </div>
+                <% } else { %>
+                  <div class="alert alert-info text-center" role="alert">
+                    <strong>Hi <%= username %>!</strong> You have already logged your attendance.
+                  </div>
+                  <!-- TIME CARD -->
+                  <% if (status === "PRESENT") { %>
+                    <div class="card text-white bg-success mb-3">
+                      <div class="card-header"><%= group %>/<%= username %>/attendance</div>
+                      <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-calendar2-check"></i> <%= status %></h5>
+                        <p class="card-text"><i class="bi bi-alarm"></i> <strong><%= timein %></strong></p>
+                      </div>
+                    </div>
+                  <% } else if (status === "SICK_LEAVE") { %>
+                    <div class="card text-white bg-dark mb-3">
+                      <div class="card-header"><%= group %>/<%= username %>/attendance</div>
+                      <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-bandaid"></i> <%= status %></h5>
+                        <p class="card-text"><i class="bi bi-alarm"></i> <strong><%= timein %></strong></p>
+                      </div>
+                    </div>
+                  <% } else if (status === "EMERGENCY_LEAVE") { %>
+                    <div class="card text-white bg-danger mb-3">
+                      <div class="card-header"><%= group %>/<%= username %>/attendance</div>
+                      <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-activity"></i> <%= status %></h5>
+                        <p class="card-text"><i class="bi bi-alarm"></i> <strong><%= timein %></strong></p>
+                      </div>
+                    </div>
+                  <% } %>
+                  <!-- TIME CARD END -->
+                  <!-- TIME TABLE -->
+                  <h6 class="display-6"><i class="bi bi-cup-hot"></i> Team</h6>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">user</th>
+                        <th scope="col">status</th>
+                        <th scope="col">time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(let i=0; i < tableData.length; i++) { %>
+                      <tr class="table-<%= tableData[i].label %>">
+                        <th scope="row"><%= i + 1 %></th>
+                        <td><%= tableData[i].name %></td>
+                        <td><%= tableData[i].status %></td>
+                        <td><%= tableData[i].timein %></td>
+                      </tr> 
+                      <% } %>
+                    </tbody>
+                  </table>
+                  <!-- TIME TABLE END  -->
+                <% } %>
                 <!--  -->
               </div>
             </div>
@@ -53,23 +111,7 @@
       </div>
     </main>
 
-    <script>
-      $(function () {
-        $("#lbl_date").text(moment().format("MMMM DD, YYYY"));
-        $("#lbl_time").text(moment().format("h:mm a"));
-        const timer = setInterval(function () {
-          $("#lbl_date").text(moment().format("MMMM DD, YYYY"));
-          $("#lbl_time").text(moment().format("h:mm a"));
-        }, 1000);
-
-        //
-        $("#btn_attendance_confirm").click(function () {
-          $("#btn_present").prop("disabled", true);
-          $("#btn_sl").prop("disabled", true);
-          $("#btn_el").prop("disabled", true);
-        });
-      });
-    </script>
+    
 
     <!-- Modal -->
     <div
@@ -91,7 +133,7 @@
             ></button>
           </div>
           <div class="modal-body">
-            Please confirm that you selected <strong>Present</strong>
+            Please confirm that you selected <mark><strong id="lbl_selected">--</strong></mark>
           </div>
           <div class="modal-footer">
             <button
@@ -113,5 +155,8 @@
         </div>
       </div>
     </div>
+
+
+    <script src="/public/js/main.js"></script>
   </body>
 </html>
