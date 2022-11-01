@@ -21,6 +21,7 @@
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "fastify": "^4.9.2",
+    "html-minifier": "^4.0.0",
     "moment-timezone": "^0.5.38",
     "otplib": "^12.0.1",
     "qrcode": "^1.5.1"
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@google-cloud/functions-framework": "^3.1.2",
     "@types/ejs": "^3.1.1",
+    "@types/html-minifier": "^4.0.2",
     "@types/node": "^18.7.6",
     "@types/qrcode": "^1.5.0",
     "bestzip": "^2.2.1",
