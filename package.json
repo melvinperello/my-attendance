@@ -4,24 +4,33 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon ./src/server.ts",
-    "test": "npx @google-cloud/functions-framework --target=fastifyFunction",
+    "start": "nodemon -e js,ejs,ts server.ts",
+    "dev": "npx @google-cloud/functions-framework --target=fastifyFunction",
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
-    "postbuild": "cd dist && bestzip index.zip index.js*"
+    "postbuild": "cp .env dist/.env && cp -R public dist/ && cp -R templates dist/ && cd dist && bestzip index.zip * .env"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/jwt": "^6.3.2",
+    "@fastify/static": "^6.5.0",
+    "@fastify/view": "^7.1.1",
     "@google-cloud/firestore": "^6.4.1",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
     "fastify": "^4.9.2",
-    "inversify": "^6.0.1",
-    "reflect-metadata": "^0.1.13"
+    "moment-timezone": "^0.5.38",
+    "otplib": "^12.0.1",
+    "qrcode": "^1.5.1"
   },
   "devDependencies": {
     "@google-cloud/functions-framework": "^3.1.2",
+    "@types/ejs": "^3.1.1",
+    "@types/html-minifier": "^4.0.2",
     "@types/node": "^18.7.6",
+    "@types/qrcode": "^1.5.0",
     "bestzip": "^2.2.1",
     "esbuild": "^0.14.51",
     "nodemon": "^2.0.19",
