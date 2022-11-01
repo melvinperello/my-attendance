@@ -11,20 +11,8 @@ import {
   checkAttendance,
   groupie,
 } from "./fun";
-// get a reference to html-minifier
-import minifier from "html-minifier";
 const { PLATFORM, JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, JWT_KEY_PHRASE } =
   process.env;
-
-// optionally defined the html-minifier options
-const minifierOpts = {
-  removeComments: true,
-  removeCommentsFromCDATA: true,
-  collapseWhitespace: true,
-  collapseBooleanAttributes: true,
-  removeAttributeQuotes: true,
-  removeEmptyAttributes: true,
-};
 
 const app = fastify({
   logger: PLATFORM ? false : true, // you can also define the level passing an object configuration to logger: {level: 'debug'}
@@ -44,10 +32,6 @@ app.register(require("@fastify/jwt"), {
 app.register(require("@fastify/view"), {
   engine: {
     ejs,
-  },
-  options: {
-    useHtmlMinifier: minifier,
-    htmlMinifierOptions: minifierOpts,
   },
 });
 app.register(require("@fastify/static"), {
