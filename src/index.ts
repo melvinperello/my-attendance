@@ -37,7 +37,7 @@ app.register(require("@fastify/view"), {
 app.register(require("@fastify/static"), {
   root: path.join(process.cwd(), "public"),
   prefix: "/public/", // optional: default '/',
-  maxAge: PLATFORM ? 300000 : 0,
+  maxAge: PLATFORM ? 60000 * 30 : 0,
 });
 
 if (PLATFORM === "gcp") {
