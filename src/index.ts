@@ -21,68 +21,16 @@ app.register(require("./plugins/static-plugin"));
 app.register(require("./plugins/security-headers-plugin"));
 app.register(require("./plugins/platform-plugin"));
 
+app.register(require("./routes/public-route"));
+app.register(require("./routes/public-api"), {
+  prefix: "/api",
+});
+
 app.register(function (isolated, opts, done) {
   isolated.addHook("onSend", async function (request, reply) {
     reply.headers({
       "Cache-Control": "no-store",
     });
-  });
-
-  isolated.get("/", async (request, reply: any) => {
-    return reply.view("/templates/index.ejs");
-  });
-
-  isolated.get("/login/:username", async (request: any, reply: any) => {
-    const { username } = request.params;
-    const data = await check(username);
-    if (data.message !== "ok" && data.message !== "user_already_associated") {
-      reply.code(data.code).send(data);
-    }
-    return reply.view("/templates/login.ejs", { username: username });
-  });
-
-  isolated.get("/pre-register/:username", async (request: any, reply: any) => {
-    const { username } = request.params;
-    const data = await preRegister(username);
-    if (data.code !== 200) {
-      return reply.code(data.code).send(data);
-    }
-    return reply.code(data.code).view("/templates/pre-register.ejs", {
-      ...data.data,
-      username: username,
-    });
-  });
-
-  // ---------------------------------------------------------------------------------------
-  // API's
-  // ---------------------------------------------------------------------------------------
-  isolated.post("/api/check", async (request: any, reply: any) => {
-    const { username } = request.body;
-    const data = await check(username);
-    reply.code(data.code).send(data);
-  });
-
-  isolated.post("/api/login", async (request: any, reply: any) => {
-    const { code, username } = request.body;
-    const data = await login(username, code);
-    if (data.code === 200 && data.message === "ok") {
-      const token = await reply.jwtSign({ username, group: "core" });
-
-      reply.code(data.code).send({
-        ...data,
-        data: {
-          token,
-        },
-      });
-    } else {
-      reply.code(data.code).send(data);
-    }
-  });
-
-  isolated.post("/api/register", async (request: any, reply: any) => {
-    const { code, username } = request.body;
-    const data = await register(username, code);
-    reply.code(data.code).send(data);
   });
 
   // ---------------------------------------------------------------------------------------

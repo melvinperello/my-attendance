@@ -1,12 +1,4 @@
-import {
-  login,
-  check,
-  preRegister,
-  register,
-  logAttendance,
-  checkAttendance,
-  groupie,
-} from "../fun";
+import { check, preRegister } from "../fun";
 
 const publicRoute = async (pub: any, opts: any) => {
   pub.addHook("onSend", async function (request: any, reply: any) {
