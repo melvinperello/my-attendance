@@ -1,7 +1,6 @@
 import "dotenv/config";
 import fastify from "fastify";
-import ejs from "ejs";
-import path from "path";
+
 import {
   login,
   check,
@@ -11,53 +10,22 @@ import {
   checkAttendance,
   groupie,
 } from "./fun";
-const { PLATFORM, JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, JWT_KEY_PHRASE } =
-  process.env;
+const { PLATFORM } = process.env;
 
 const app = fastify({
   logger: PLATFORM ? false : true, // you can also define the level passing an object configuration to logger: {level: 'debug'}
 });
-app.register(require("@fastify/jwt"), {
-  secret: {
-    private: {
-      key: JWT_PRIVATE_KEY,
-      passphrase: JWT_KEY_PHRASE,
-    },
-    public: JWT_PUBLIC_KEY,
-  },
-  sign: { algorithm: "RS256", iss: "our-attendance", expiresIn: "15m" },
-  verify: { iss: "our-attendance" },
-});
 
-app.register(require("@fastify/view"), {
-  engine: {
-    ejs,
-  },
-});
-app.register(require("@fastify/static"), {
-  root: path.join(process.cwd(), "public"),
-  prefix: "/public/", // optional: default '/',
-  maxAge: PLATFORM ? 60000 * 30 : 0,
-});
+app.register(require("./plugins/security-plugin"));
+app.register(require("./plugins/view-plugin"));
+app.register(require("./plugins/static-plugin"));
+app.register(require("./plugins/security-headers-plugin"));
 
 if (PLATFORM === "gcp") {
   app.addContentTypeParser("application/json", {}, (req, body: any, done) => {
     done(null, body.body);
   });
 }
-
-app.addHook("onSend", async function (request, reply) {
-  reply.headers({
-    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
-    "Content-Security-Policy":
-      "default-src 'self' cdn.jsdelivr.net code.jquery.com; img-src 'self' data:;",
-    "X-Content-Type-Options": "nosniff",
-    "X-Frame-Options": "DENY",
-    "Referrer-Policy": "no-referrer",
-    "Permissions-Policy": "geolocation=(), microphone=()",
-    "X-XSS-Protection": "1; mode=block",
-  });
-});
 
 app.register(function (isolated, opts, done) {
   isolated.addHook("onSend", async function (request, reply) {
