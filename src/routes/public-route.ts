@@ -7,6 +7,10 @@ const publicRoute = async (pub: any, opts: any) => {
     });
   });
 
+  pub.register(require("./public-api"), {
+    prefix: "/api",
+  });
+
   pub.get("/", async (request: any, reply: any) => {
     return reply.view("/templates/index.ejs");
   });

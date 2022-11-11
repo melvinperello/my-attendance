@@ -22,9 +22,6 @@ app.register(require("./plugins/security-headers-plugin"));
 app.register(require("./plugins/platform-plugin"));
 
 app.register(require("./routes/public-route"));
-app.register(require("./routes/public-api"), {
-  prefix: "/api",
-});
 
 app.register(function (isolated, opts, done) {
   isolated.addHook("onSend", async function (request, reply) {
