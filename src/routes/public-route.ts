@@ -1,16 +1,6 @@
 import { check, preRegister } from "../fun";
 
 const publicRoute = async (pub: any, opts: any) => {
-  pub.addHook("onSend", async function (request: any, reply: any) {
-    reply.headers({
-      "Cache-Control": "no-store",
-    });
-  });
-
-  pub.register(require("./public-api"), {
-    prefix: "/api",
-  });
-
   pub.get("/", async (request: any, reply: any) => {
     return reply.view("/templates/index.ejs");
   });

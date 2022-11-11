@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head.ejs',{title:"our-attendance - Reports"}) -%>
+  <body>
+    <%- include('./partials/nav.ejs') -%>
+    <main>
+      <div class="container mt-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="row justify-content-center">
+              <div class="col col-sm-12">
+                <!-- START OF CONTENT -->
+                <h1 class="display-6">
+                  <i class="bi bi-file-earmark-bar-graph"></i> Reports
+                </h1>
+                <hr />
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col"><mark>Members</mark></th>
+                      <% for(let i=0; i < tableHeaders.length; i++) { %>
+                      <th scope="col" class="<%= `${tableHeaders[i].color}` %>">
+                        <div class="d-flex flex-column align-items-center">
+                          <span><%= tableHeaders[i].number %></span>
+                          <small class="fw-normal"
+                            ><%= tableHeaders[i].name %></small
+                          >
+                        </div>
+                        %>
+                      </th>
+                      <% } %>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">melvin</th>
+                      <td>P</td>
+                      <td>P</td>
+                      <td>P</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- END OF CONTENT -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--  -->
+      </div>
+    </main>
+  </body>
+</html>

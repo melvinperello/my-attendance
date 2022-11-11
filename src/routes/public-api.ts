@@ -10,8 +10,10 @@ const publicApi = async (pub: any, opts: any) => {
   pub.post("/login", async (request: any, reply: any) => {
     const { code, username } = request.body;
     const data = await login(username, code);
+    const group = data.data?.group || "core";
+    const role = data.data?.role || "member";
     if (data.code === 200 && data.message === "ok") {
-      const token = await reply.jwtSign({ username, group: "core" });
+      const token = await reply.jwtSign({ username, group, role });
 
       reply.code(data.code).send({
         ...data,

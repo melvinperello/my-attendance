@@ -1,9 +1,37 @@
 import { authenticator } from "otplib";
 import QRCode from "qrcode";
 import moment from "moment-timezone";
+import { extendMoment } from "moment-range";
 const { MA_TIMEZONE } = process.env;
 const { Firestore } = require("@google-cloud/firestore");
 const firestore = new Firestore();
+// @ts-expect-error this is an extension of moment
+export const momentInstance = extendMoment(moment);
+
+// ----------------------------------------------------
+// Firestore Document Paths.
+// ----------------------------------------------------
+const getAuthorizationPath = (username: string) => {
+  return `authorization/${username}`;
+};
+
+const getGroupCurrentAttendancePath = (group: string) => {
+  return `attendance/${getMoment().format("YYYY-MM-DD")}/${group}`;
+};
+
+const getCurrentAttendancePath = (group: string, username: string) => {
+  return `${getGroupCurrentAttendancePath(group)}/${username}`;
+};
+
+// ----------------------------------------------------
+// Utility Functions.
+// ----------------------------------------------------
+export const getMoment = (time?: string) => {
+  if (time) {
+    return moment(time).tz(MA_TIMEZONE as string);
+  }
+  return moment().tz(MA_TIMEZONE as string);
+};
 
 const getDoc = async (name: string) => {
   const document = firestore.doc(name);
@@ -15,28 +43,26 @@ const getDoc = async (name: string) => {
   }
 };
 
-const getMoment = () => {
-  return moment().tz(MA_TIMEZONE as string);
-};
-
 const getAuthDoc = async (username: string) => {
-  const doc = await getDoc(`authorization/${username}`);
+  const doc = await getDoc(getAuthorizationPath(username));
   return doc;
 };
 
 const updateAuthDoc = async (username: string, data: any) => {
-  const document = firestore.doc(`authorization/${username}`);
+  const document = firestore.doc(getAuthorizationPath(username));
   await document.update(data);
 };
 
+// ----------------------------------------------------
+// Service Functions.
+// ----------------------------------------------------
 export const logAttendance = async (
   username: string,
   group: string,
   status: string
 ) => {
-  const current = getMoment().format("YYYY-MM-DD");
   const timein = getMoment().format("HH:mm");
-  const docName = `attendance/${current}/${group}/${username}`;
+  const docName = getCurrentAttendancePath(group, username);
 
   const doc = await getDoc(docName);
   if (doc) {
@@ -59,14 +85,15 @@ export const logAttendance = async (
 };
 
 export const checkAttendance = async (username: string, group: string) => {
-  const current = getMoment().format("YYYY-MM-DD");
-  const docName = `attendance/${current}/${group}/${username}`;
-  const doc = await getDoc(docName);
+  const doc = await getDoc(getCurrentAttendancePath(group, username));
   if (doc) {
     return {
       code: 200,
       message: "already_logged",
-      data: doc.data(),
+      data: {
+        ...doc.data(),
+        label: getCurrentAttendancePath(group, username),
+      },
     };
   } else {
     return {
@@ -78,9 +105,9 @@ export const checkAttendance = async (username: string, group: string) => {
 };
 
 export const groupie = async (group: string) => {
-  const current = getMoment().format("YYYY-MM-DD");
-  const docName = `attendance/${current}/${group}`;
-  const collectionReference = firestore.collection(docName);
+  const collectionReference = firestore.collection(
+    getGroupCurrentAttendancePath(group)
+  );
   const attendances = await collectionReference.orderBy("timein").get();
   const attendancesData = attendances.docs.map((d: any) => {
     const thisDocData = d.data();
@@ -114,7 +141,7 @@ export const login = async (username: string, code: string) => {
       data: null,
     };
   }
-  const { secret, verified } = doc.data();
+  const { secret, verified, group, role } = doc.data();
   if (!verified) {
     return {
       code: 401,
@@ -133,7 +160,10 @@ export const login = async (username: string, code: string) => {
   return {
     code: 200,
     message: "ok",
-    data: null,
+    data: {
+      group,
+      role,
+    },
   };
 };
 
@@ -245,3 +275,7 @@ export const preRegister = async (username: string) => {
     },
   };
 };
+
+// ----------------------------------------------------
+// Reporting Functions.
+// ----------------------------------------------------
