@@ -1,6 +1,7 @@
 import { authenticator } from "otplib";
 import QRCode from "qrcode";
 import moment from "moment-timezone";
+const { MA_TIMEZONE } = process.env;
 const { Firestore } = require("@google-cloud/firestore");
 const firestore = new Firestore();
 
@@ -15,7 +16,7 @@ const getDoc = async (name: string) => {
 };
 
 const getMoment = () => {
-  return moment().tz("Asia/Taipei");
+  return moment().tz(MA_TIMEZONE as string);
 };
 
 const getAuthDoc = async (username: string) => {

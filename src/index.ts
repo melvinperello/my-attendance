@@ -10,22 +10,16 @@ import {
   checkAttendance,
   groupie,
 } from "./fun";
-const { PLATFORM } = process.env;
 
 const app = fastify({
-  logger: PLATFORM ? false : true, // you can also define the level passing an object configuration to logger: {level: 'debug'}
+  logger: false,
 });
 
 app.register(require("./plugins/security-plugin"));
 app.register(require("./plugins/view-plugin"));
 app.register(require("./plugins/static-plugin"));
 app.register(require("./plugins/security-headers-plugin"));
-
-if (PLATFORM === "gcp") {
-  app.addContentTypeParser("application/json", {}, (req, body: any, done) => {
-    done(null, body.body);
-  });
-}
+app.register(require("./plugins/platform-plugin"));
 
 app.register(function (isolated, opts, done) {
   isolated.addHook("onSend", async function (request, reply) {

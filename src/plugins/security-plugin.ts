@@ -1,14 +1,14 @@
 import fastifyPlugin from "fastify-plugin";
-const { JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, JWT_KEY_PHRASE } = process.env;
+const { MA_PRIVATE_KEY, MA_PUBLIC_KEY, MA_PHRASE_KEY } = process.env;
 
 const securityPlugin = async (fastify: any) => {
   fastify.register(require("@fastify/jwt"), {
     secret: {
       private: {
-        key: JWT_PRIVATE_KEY,
-        passphrase: JWT_KEY_PHRASE,
+        key: MA_PRIVATE_KEY,
+        passphrase: MA_PHRASE_KEY,
       },
-      public: JWT_PUBLIC_KEY,
+      public: MA_PUBLIC_KEY,
     },
     sign: { algorithm: "RS256", iss: "our-attendance", expiresIn: "15m" },
     verify: { iss: "our-attendance" },
