@@ -29,7 +29,6 @@ const privateRoute = async (pri: any, opts: any) => {
     if (data.code === 200) {
       // get all attendance
       const myGroupie = await groupie(group);
-      console.log(myGroupie);
       return reply.view("/templates/main.ejs", {
         code: data.code,
         status: data.data.status,
