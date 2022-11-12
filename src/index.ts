@@ -5,7 +5,7 @@ import fastify from "fastify";
  * Create Fastify Instance.
  */
 const app = fastify({
-  logger: false,
+  logger: true,
 });
 
 /**

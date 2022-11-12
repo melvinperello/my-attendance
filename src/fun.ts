@@ -16,11 +16,15 @@ const getAuthorizationPath = (username: string) => {
 };
 
 const getGroupCurrentAttendancePath = (group: string) => {
-  return `attendance/${getMoment().format("YYYY-MM-DD")}/${group}`;
+  return `${getTodayAttendancePath()}/${group}`;
 };
 
 const getCurrentAttendancePath = (group: string, username: string) => {
   return `${getGroupCurrentAttendancePath(group)}/${username}`;
+};
+
+const getTodayAttendancePath = () => {
+  return `attendance/${getMoment().format("YYYY-MM-DD")}`;
 };
 
 // ----------------------------------------------------
@@ -72,11 +76,26 @@ export const logAttendance = async (
       data: doc.data(),
     };
   }
+
+  // ---------------------------------
+  // check if the master path is existing.
+  const masterPath = getTodayAttendancePath();
+  const masterDoc = await getDoc(masterPath);
+  if (!masterDoc) {
+    // if not existing create and add an expiration.
+    const masterDocUpdate = firestore.doc(masterPath);
+    await masterDocUpdate.set({
+      expireIn: Timestamp.fromDate(getMoment().add(40, "days").toDate()),
+    });
+  }
+  // ---------------------------------
+
   const document = firestore.doc(docName);
   const data = await document.set({
     status: status,
     timein: timein,
   });
+
   return {
     code: 201,
     message: "created",
