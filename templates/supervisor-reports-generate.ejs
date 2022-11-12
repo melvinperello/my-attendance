@@ -15,45 +15,47 @@
                 </h1>
                 <hr />
                 <span><strong><%= start %> // <%= end %></strong></span>
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="col"><mark>Members</mark></th>
-                      <% for(let i=0; i < tableHeaders.length; i++) { %>
-                      <th
-                        scope="col"
-                        class="<%= `bg-${tableHeaders[i].color}` %>"
-                      >
-                        <div class="d-flex flex-column align-items-center">
-                          <span><%= tableHeaders[i].number %></span>
-                          <small class="fw-normal"
-                            ><%= tableHeaders[i].name %></small
-                          >
-                        </div>
-                        %>
-                      </th>
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col"><mark>Members</mark></th>
+                        <% for(let i=0; i < tableHeaders.length; i++) { %>
+                        <th
+                          scope="col"
+                          class="<%= `bg-${tableHeaders[i].color}` %>"
+                        >
+                          <div class="d-flex flex-column align-items-center">
+                            <span><%= tableHeaders[i].number %></span>
+                            <small class="fw-normal"
+                              ><%= tableHeaders[i].name %></small
+                            >
+                          </div>
+                          %>
+                        </th>
+                        <% } %>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(const name of Object.keys(attendance).sort()) { %>
+                      <tr>
+                        <th scope="row"><%= name %></th>
+                        <% for(const day of
+                        Object.keys(attendance[name]).sort()) { %>
+                        <td
+                          class="text-center text-light bg-<%= `${attendance[name][day].color}` %>"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="<%= `${day}-${attendance[name][day].status}` %>"
+                        >
+                          <%= attendance[name][day].status %>
+                        </td>
+                        <% } %>
+                      </tr>
                       <% } %>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% for(const name of Object.keys(attendance).sort()) { %>
-                    <tr>
-                      <th scope="row"><%= name %></th>
-                      <% for(const day of Object.keys(attendance[name]).sort())
-                      { %>
-                      <td
-                        class="text-center text-light bg-<%= `${attendance[name][day].color}` %>"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="<%= `${day}-${attendance[name][day].status}` %>"
-                      >
-                        <%= attendance[name][day].status %>
-                      </td>
-                      <% } %>
-                    </tr>
-                    <% } %>
-                  </tbody>
-                </table>
+                    </tbody>
+                  </table>
+                </div>
                 <div
                   class="alert alert-warning d-flex align-items-center"
                   role="alert"
