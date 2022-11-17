@@ -6,7 +6,7 @@ const staticPlugin = async (fastify: any) => {
   fastify.register(require("@fastify/static"), {
     root: path.join(process.cwd(), "public"),
     prefix: "/public/", // optional: default '/',
-    maxAge: MA_PLATFORM ? 60000 * 30 : 0,
+    maxAge: MA_PLATFORM ? 60000 * 60 * 24 * 30 : 0,
   });
 };
 
