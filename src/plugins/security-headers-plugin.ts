@@ -5,7 +5,7 @@ const securityHeadersPlugin = async (fastify: any) => {
     reply.headers({
       "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
       "Content-Security-Policy":
-        "default-src 'self' cdn.jsdelivr.net code.jquery.com; img-src 'self' data:;",
+        "default-src 'self' cdn.jsdelivr.net code.jquery.com; img-src 'self' data: our-attendance-33tuv2yxsq-as.a.run.app;",
       "X-Content-Type-Options": "nosniff",
       "X-Frame-Options": "DENY",
       "Referrer-Policy": "no-referrer",

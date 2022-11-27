@@ -8,6 +8,10 @@ const staticPlugin = async (fastify: any) => {
     prefix: "/public/", // optional: default '/',
     maxAge: MA_PLATFORM ? 60000 * 60 * 24 : 0,
   });
+
+  fastify.get("/sw.js", async function (req: any, reply: any) {
+    return reply.sendFile("sw.js", "public/js");
+  });
 };
 
 export default fastifyPlugin(staticPlugin);

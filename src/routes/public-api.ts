@@ -1,6 +1,24 @@
-import { check, register, login } from "../fun";
+import {
+  check,
+  register,
+  login,
+  saveSubscription,
+  sendNotification,
+} from "../fun";
 
 const publicApi = async (pub: any, opts: any) => {
+  pub.post("/save-subscription", async (request: any, reply: any) => {
+    const subscription = request.body;
+    const data = await saveSubscription(subscription);
+    return reply.code(data.code).send(data);
+  });
+
+  pub.get("/send-notification", async (request: any, reply: any) => {
+    const { message } = request.query;
+    const data = await sendNotification(message);
+    return reply.code(data.code).send(data);
+  });
+
   pub.post("/check", async (request: any, reply: any) => {
     const { username } = request.body;
     const data = await check(username);
