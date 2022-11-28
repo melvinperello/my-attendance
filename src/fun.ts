@@ -2,11 +2,74 @@ import { authenticator } from "otplib";
 import QRCode from "qrcode";
 import moment from "moment-timezone";
 import { extendMoment } from "moment-range";
+import sha256 from "crypto-js/sha256";
 const { MA_TIMEZONE } = process.env;
 const { Firestore, Timestamp } = require("@google-cloud/firestore");
 const firestore = new Firestore();
 // @ts-expect-error this is an extension of moment
 const momentInstance = extendMoment(moment);
+const webpush = require("web-push");
+webpush.setVapidDetails(
+  "mailto:example@yourdomain.org",
+  process.env.MA_VAPID_PUBLIC_KEY,
+  process.env.MA_VAPID_PRIVATE_KEY
+);
+
+// ----------------------------------------------------
+// Push Service
+// ----------------------------------------------------
+export const saveSubscription = async (subscription: {
+  endpoint: string;
+  expirationTime: any;
+  keys: any;
+}) => {
+  const { endpoint } = subscription;
+  const key = sha256(endpoint);
+  const document = firestore.doc(`push/${key}`);
+  await document.set(subscription);
+  return {
+    code: 201,
+    message: "created",
+    data: null,
+  };
+};
+
+export const sendNotification = async (message: string) => {
+  const collectionReference = firestore.collection("push");
+  const subscriptions = await collectionReference.get();
+  const subscriptionsData = subscriptions.docs.map((d: any) => {
+    return {
+      ...d.data(),
+      id: d.id,
+    };
+  });
+
+  const pushResult = [];
+  for (const endpoint of subscriptionsData) {
+    try {
+      const result: any = await webpush.sendNotification(
+        endpoint,
+        message || "Test Message"
+      );
+      pushResult.push({
+        code: result.statusCode,
+        result: result.body,
+        key: endpoint.id,
+      });
+    } catch (ex: any) {
+      pushResult.push({
+        code: ex.statusCode,
+        result: ex.body,
+        key: endpoint.id,
+      });
+    }
+  }
+  return {
+    code: 200,
+    message: "ok",
+    data: pushResult,
+  };
+};
 
 // ----------------------------------------------------
 // Firestore Document Paths.

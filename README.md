@@ -14,7 +14,7 @@ my-attendance is a web based attendance tracker that can be deployed anyhwere,
 
 ## Tech
 
-Dillinger uses a number of open source projects to work properly:
+my-attendance uses a number of open source projects to work properly:
 
 - [Fastify](https://www.fastify.io/) - Fastify is a web framework highly focused on providing the best developer experience with the least overhead and a powerful plugin architecture, inspired by Hapi and Express.
 - [ejs](https://ejs.co/) - EJS is a simple templating language that lets you generate HTML markup with plain JavaScript.
@@ -87,3 +87,9 @@ See additional resources for google cloud platform.
 - https://cloud.google.com/nodejs/docs/reference/firestore/latest
 - https://cloud.google.com/docs/authentication/client-libraries
 - https://cloud.google.com/docs/authentication/provide-credentials-adc
+
+### Generate VAPID Keys
+
+```sh
+web-push generate-vapid-keys
+```
