@@ -9,6 +9,11 @@ const app = fastify({
 });
 
 /**
+ * Add Compression
+ */
+app.register(import("@fastify/compress"), { global: true });
+
+/**
  * Add Security using JWT.
  */
 app.register(require("./plugins/security-plugin"));
