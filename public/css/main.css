@@ -1,6 +1,11 @@
-.x-text-xx-small{
-    font-size: xx-small
+.x-text-xx-small {
+  font-size: xx-small;
 }
-.x-text-x-small{
-    font-size: x-small
+.x-text-x-small {
+  font-size: x-small;
+}
+
+.x-avatar-container {
+  width: 25px;
+  height: 25px;
 }

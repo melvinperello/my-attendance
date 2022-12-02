@@ -142,7 +142,20 @@
                     <% for(let i=0; i < tableData.length; i++) { %>
                     <tr class="table-<%= tableData[i].label %>">
                       <th scope="row"><%= i + 1 %></th>
-                      <td><%= tableData[i].name %></td>
+                      <td>
+                        <div
+                          class="d-flex flex-row flex gap-1 align-items-center"
+                        >
+                          <div class="x-avatar-container">
+                            <img
+                              class="img-responsive"
+                              alt="<%= `Image of ${tableData[i].name}` %>"
+                              src="<%= `https://avatars.dicebear.com/api/adventurer-neutral/${tableData[i].name}.svg` %>"
+                            />
+                          </div>
+                          <strong> <%= tableData[i].name %> </strong>
+                        </div>
+                      </td>
                       <td><%= tableData[i].status %></td>
                       <td><%= tableData[i].timein %></td>
                     </tr>
