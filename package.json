@@ -19,6 +19,7 @@
     "@fastify/static": "^6.5.0",
     "@fastify/view": "^7.1.1",
     "@google-cloud/firestore": "^6.4.1",
+    "@google-cloud/secret-manager": "^4.1.4",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",

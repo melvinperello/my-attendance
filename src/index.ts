@@ -1,53 +1,21 @@
-import "dotenv/config";
-import fastify from "fastify";
+// import "dotenv/config";
+import { createEnvironment } from "./secret";
 
-/**
- * Create Fastify Instance.
- */
-const app = fastify({
-  logger: false,
-});
+let appInstance: any = null;
 
-/**
- * Add Compression
- */
-app.register(import("@fastify/compress"), { global: true });
-
-/**
- * Add Security using JWT.
- */
-app.register(require("./plugins/security-plugin"));
-
-/**
- * Add Template Engine.
- */
-app.register(require("./plugins/view-plugin"));
-
-/**
- * Serve Static Files and Resources, from the public folder.
- */
-app.register(require("./plugins/static-plugin"));
-
-/**
- * Add Security Headers.
- */
-app.register(require("./plugins/security-headers-plugin"));
-
-/**
- * Add Serverless Platofrm Content Parser.
- */
-app.register(require("./plugins/platform-plugin"));
-
-/**
- * Add the main router.
- */
-app.register(require("./routers/main-router"));
+const getAppInstance = async () => {
+  if (!appInstance) {
+    await createEnvironment();
+    appInstance = (await import("./app")).default;
+  }
+  return appInstance;
+};
 
 /**
  * Google Cloud Platform Handler.
  */
 export const fastifyFunction = async (request: any, reply: any) => {
+  const app = await getAppInstance();
   await app.ready();
   app.server.emit("request", request, reply);
 };
-export default app;
