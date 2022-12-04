@@ -8,16 +8,18 @@
     "dev": "set MA_PLATFORM=gcp && npx @google-cloud/functions-framework --target=fastifyFunction",
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
-    "postbuild": "cp .env dist/.env && cp -R public dist/ && cp -R templates dist/ && cd dist && bestzip index.zip * .env"
+    "postbuild": "cp -R public dist/ && cp -R templates dist/ && cd dist && bestzip index.zip *"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/compress": "^6.2.0",
     "@fastify/jwt": "^6.3.2",
     "@fastify/static": "^6.5.0",
     "@fastify/view": "^7.1.1",
     "@google-cloud/firestore": "^6.4.1",
+    "@google-cloud/secret-manager": "^4.1.4",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
