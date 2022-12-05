@@ -1,10 +1,14 @@
 # my-attendance
 
-## Platform Agnostic Attendance Tracker
+## Multi-Platform Attendance Tracker
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-my-attendance is a web based attendance tracker that can be deployed anyhwere,
+my-attendance is a web based attendance tracker that can be deployed on multiple platforms with minimal configurations.
+
+> Please keep in mind that my-attendance is still under development and full backward compatibility is not guaranteed before reaching v1.0.0.
+
+> my-attendance follows **Semantic Versioning 2.0.0**
 
 ## Features
 
@@ -38,11 +42,15 @@ npm start
 my-attendaance is currently extended with the following fastify plugins.
 Instructions on how to use them in your own application are linked below.
 
-| Plugin          | README                                            |
-| --------------- | ------------------------------------------------- |
-| @fastify/jwt    | [https://github.com/fastify/fastify-jwt][pldb]    |
-| @fastify/static | [https://github.com/fastify/fastify-static][plgh] |
-| @fastify/view   | [https://github.com/fastify/point-of-view][plgd]  |
+| Plugin                  | Description                                           |
+| ----------------------- | ----------------------------------------------------- |
+| @fastify/jwt            | https://github.com/fastify/fastify-jwt                |
+| @fastify/static         | https://github.com/fastify/fastify-static             |
+| @fastify/view           | https://github.com/fastify/point-of-view              |
+| @fastify/compress       | https://github.com/fastify/fastify-compress           |
+| @fastify/compress       | https://github.com/fastify/fastify-compress           |
+| platform-plugin         | Adds necessary configuration for the current platform |
+| security-headers-plugin | Adds security headers to fastify responses            |
 
 ## Roadmap
 
@@ -66,11 +74,24 @@ openssl rsa -pubout -in private_key.pem -out public_key.pem
 
 ### Environment Variables
 
-- **MA_PRIVATE_KEY** - private key as string used in generating JWT token.
-- **MA_PUBLIC_KEY** - public key as string used in validating JWT Token.
-- **MA_PHRASE_KEY** - phrase key for the private key.
-- **MA_TIMEZONE** - the current time zone for attendance logging, defaults to Asia/Taipei.
-- **MA_PLATFORM** - describes the current environment to apply necessary settings to run the application.
+**Configuration Variables**
+
+| Variable       | README                                                                                                                                       |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| MA_PLATFORM    | identifier of the host platform, valid values is only gcp                                                                                    |
+| MA_TIMEZONE    | Please see list of available timezones [Timezones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) / defaults to "Asia/Taipei" |
+| MA_SECRET_NAME | The name of the secret for security sensitive variables                                                                                      |
+
+**Security Sensitive Variables**
+These are stored in Secrets Manager
+
+| Variable                   | README                                             |
+| -------------------------- | -------------------------------------------------- |
+| MA_SEC_PRIVATE_KEY         | private key as string used in generating JWT token |
+| MA_SEC_PUBLIC_KEY          | public key as string used in validating JWT Token  |
+| MA_SEC_PRIVATE_PHRASE_KEY  | phrase key for the JWT Private Key                 |
+| MA_SEC_WEBPUSH_PRIVATE_KEY | VAPID Private Key                                  |
+| MA_SEC_WEBPUSH_PUBLIC_KEY  | VAPID Public Key                                   |
 
 ### Google Cloud Platform
 
