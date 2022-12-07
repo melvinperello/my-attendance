@@ -1,5 +1,5 @@
 // import "dotenv/config";
-import { createEnvironment } from "./secret";
+import { createEnvironment } from "./environment";
 
 let appInstance: any = null;
 

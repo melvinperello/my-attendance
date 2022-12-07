@@ -74,6 +74,12 @@ openssl rsa -pubout -in private_key.pem -out public_key.pem
 
 ### Environment Variables
 
+**Order of Environment Variables**
+
+1. System - Any System Configured Variables Will not be overidden if it's already set.
+2. .env - If system variables are not set .env files will be used.
+3. Secrets Manager - any variables configured above will be overidden by the Secrets Manager. (This will take the highest priority)
+
 **Configuration Variables**
 
 | Variable       | README                                                                                                                                       |

@@ -1,8 +1,8 @@
 import fastifyPlugin from "fastify-plugin";
-const { MA_PLATFORM } = process.env;
+import { isGCP } from "../utils";
 
 const platformPlugin = async (fastify: any) => {
-  if (MA_PLATFORM === "gcp") {
+  if (isGCP()) {
     fastify.addContentTypeParser(
       "application/json",
       {},

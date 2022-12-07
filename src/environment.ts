@@ -1,11 +1,13 @@
 import * as dotenv from "dotenv";
+dotenv.config();
+const { MA_SECRET_NAME } = process.env;
 const { SecretManagerServiceClient } = require("@google-cloud/secret-manager");
 const smClient = new SecretManagerServiceClient();
 
 export const createEnvironment = async () => {
   console.info("[Environment] Creating . . .");
   const [version] = await smClient.accessSecretVersion({
-    name: "projects/146520701588/secrets/our-attendance-env/versions/latest",
+    name: MA_SECRET_NAME,
   });
   const envString = version.payload.data.toString();
   const env = dotenv.parse(Buffer.from(envString));

@@ -11,8 +11,8 @@ const momentInstance = extendMoment(moment);
 const webpush = require("web-push");
 webpush.setVapidDetails(
   "mailto:example@yourdomain.org",
-  process.env.MA_VAPID_PUBLIC_KEY,
-  process.env.MA_VAPID_PRIVATE_KEY
+  process.env.MA_SEC_VAPID_PUBLIC_KEY,
+  process.env.MA_SEC_VAPID_PRIVATE_KEY
 );
 
 // ----------------------------------------------------
@@ -57,11 +57,17 @@ export const sendNotification = async (message: string) => {
         key: endpoint.id,
       });
     } catch (ex: any) {
-      pushResult.push({
-        code: ex.statusCode,
-        result: ex.body,
-        key: endpoint.id,
-      });
+      try {
+        const pushToDelete = firestore.doc("push/" + endpoint.id);
+        await pushToDelete.delete();
+        pushResult.push({
+          code: ex.statusCode,
+          result: ex.body,
+          key: endpoint.id,
+        });
+      } catch (deleteEx) {
+        console.error(deleteEx);
+      }
     }
   }
   return {
