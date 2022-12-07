@@ -6,7 +6,15 @@ import {
   sendNotification,
 } from "../fun";
 
+const { MA_SEC_VAPID_PUBLIC_KEY } = process.env;
+
 const publicApi = async (pub: any, opts: any) => {
+  pub.get("/push-public-key", async (request: any, reply: any) => {
+    return reply.code(200).send({
+      key: MA_SEC_VAPID_PUBLIC_KEY,
+    });
+  });
+
   pub.post("/save-subscription", async (request: any, reply: any) => {
     const subscription = request.body;
     const data = await saveSubscription(subscription);

@@ -12,20 +12,23 @@ const urlB64ToUint8Array = (base64String) => {
   }
   return outputArray;
 };
-// saveSubscription saves the subscription to the backend
-const saveSubscription = async (subscription) => {};
 
 self.addEventListener("install", function (event) {
   console.log("[my-attendance] install . . .");
 });
 
-self.addEventListener("activate", async () => {
-  console.log("[my-attendance] active . . .");
-  // This will be called only once when the service worker is activated.
+self.addEventListener("message", async function (evt) {
+  if (evt.data !== "READY") {
+    return;
+  }
+
+  const keyRequest = await fetch("/api/push-public-key", {
+    method: "GET",
+  });
+  const key = await keyRequest.json();
+
   try {
-    const applicationServerKey = urlB64ToUint8Array(
-      "BNtDt1zP8368jCoC_Ron8dNKGK6mzXrsp6eew5wXbV0g5lr9IvIyORBZ_wbSSYVFo8CdSsDvkrsBqemuWFmbv50"
-    );
+    const applicationServerKey = urlB64ToUint8Array(key.key);
     const options = { applicationServerKey, userVisibleOnly: true };
     const subscription = await self.registration.pushManager.subscribe(options);
     const response = await fetch("/api/save-subscription", {
@@ -40,6 +43,10 @@ self.addEventListener("activate", async () => {
   } catch (err) {
     console.log("[my-attendance] Push Service Error: ", err);
   }
+});
+
+self.addEventListener("activate", async () => {
+  console.log("[my-attendance] active . . .");
 });
 
 self.addEventListener("push", function (event) {

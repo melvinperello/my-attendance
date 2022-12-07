@@ -5,10 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "nodemon -e js,ejs,ts server.ts",
-    "dev": "set MA_PLATFORM=gcp && npx @google-cloud/functions-framework --target=fastifyFunction",
+    "dev": "set K_SERVICE=our-attendance && npx @google-cloud/functions-framework --target=fastifyFunction",
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
-    "postbuild": "cp -R public dist/ && cp -R templates dist/ && cd dist && bestzip index.zip *"
+    "postbuild": "cp .env dist/.env && cp -R public dist/ && cp -R templates dist/ && cd dist && bestzip index.zip * .env"
   },
   "keywords": [],
   "author": "",

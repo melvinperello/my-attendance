@@ -1,4 +1,4 @@
-import { createEnvironment } from "./src/secret";
+import { createEnvironment } from "./src/environment";
 (async () => {
   await createEnvironment();
   const app = (await import("./src/app")).default;
