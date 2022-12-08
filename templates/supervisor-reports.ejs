@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/head.ejs',{title:"our-attendance - Reports"}) -%>
+  <%- include('./partials/head.ejs',{title:process.env.MA_APP_NAME + " - Reports"}) -%>
   <body>
     <%- include('./partials/nav.ejs') -%>
     <main>
@@ -10,31 +10,29 @@
             <div class="row justify-content-center">
               <div class="col col-sm-12 col-md-6">
                 <!-- START OF CONTENT -->
-                <h1 class="display-6">
-                  <i class="bi bi-file-earmark-bar-graph"></i> Reports
-                </h1>
+                <h1 class="display-6"><i class="bi bi-file-earmark-bar-graph"></i> Reports</h1>
                 <hr />
                 <div class="list-group">
                   <a
-                    href="<%= `/main/supervisor/reports/generate?start=${start}&end=${end}&token=${token}` %>"
+                    href="<%= `/main/supervisor/reports/generate?start=${start}&end=${end}` %>"
                     class="list-group-item list-group-item-action list-group-item-primary"
                   >
                     <div class="d-flex w-100 justify-content-between">
                       <h5 class="mb-1"><%= end %></h5>
                       <!-- <small>Created 3 days ago</small> -->
                     </div>
-                    <p class="mb-1">Time Period</p>
+                    <p class="mb-1">Current Period</p>
                     <small><%= start %> | <%= end %></small>
                   </a>
                   <a
-                    href="<%= `/main/supervisor/reports/generate?start=${pStart}&end=${pEnd}&token=${token}` %>"
+                    href="<%= `/main/supervisor/reports/generate?start=${pStart}&end=${pEnd}` %>"
                     class="list-group-item list-group-item-action list-group-item-secondary"
                   >
                     <div class="d-flex w-100 justify-content-between">
                       <h5 class="mb-1"><%= pEnd %></h5>
                       <!-- <small class="text-muted">Created 3 days ago</small> -->
                     </div>
-                    <p class="mb-1">Time Period</p>
+                    <p class="mb-1">Previous Period</p>
                     <small><%= pStart %> | <%= pEnd %></small>
                   </a>
                 </div>

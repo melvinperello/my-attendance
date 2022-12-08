@@ -1,9 +1,4 @@
 $(function () {
-  const token = $.cookie("token");
-  if (token) {
-    window.location.href = "/main?token=" + token;
-  }
-
   $("#msg_not_exists").css("visibility", "hidden");
   $("#frm_login").submit(async function (event) {
     event.preventDefault();

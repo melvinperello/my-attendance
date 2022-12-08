@@ -1,26 +1,17 @@
 const protectedRouter = async (pro: any, opts: any) => {
   pro.addHook("onRequest", async (request: any, reply: any) => {
-    /**
-     * Authorized Requests.
-     */
-    const qsToken = request.query.token;
     try {
-      if (qsToken) {
-        try {
-          await pro.jwt.verify(qsToken);
-        } catch (ex: any) {
-          if (ex.code === "FAST_JWT_EXPIRED") {
-            const { username } = pro.jwt.decode(qsToken);
-            reply.redirect("/login/" + username + "?message=expired");
-          } else {
-            throw ex;
-          }
+      try {
+        await request.jwtVerify({ onlyCookie: true });
+      } catch (ex: any) {
+        if (ex.code === "FST_JWT_NO_AUTHORIZATION_IN_COOKIE") {
+          return reply.redirect("/?message=no_cookie");
+        } else {
+          throw ex;
         }
-      } else {
-        await request.jwtVerify();
       }
     } catch (err) {
-      reply.send(err);
+      return reply.send(err);
     }
   });
 

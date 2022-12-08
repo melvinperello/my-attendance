@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/compress": "^6.2.0",
+    "@fastify/cookie": "^8.3.0",
     "@fastify/jwt": "^6.3.2",
     "@fastify/static": "^6.5.0",
     "@fastify/view": "^7.1.1",

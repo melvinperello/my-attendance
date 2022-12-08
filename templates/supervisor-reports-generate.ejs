@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/head.ejs',{title:"our-attendance - Reports"}) -%>
+  <%- include('./partials/head.ejs',{title:process.env.MA_APP_NAME + " - Reports"}) -%>
   <body>
     <%- include('./partials/nav.ejs') -%>
     <main>
@@ -10,9 +10,7 @@
             <div class="row justify-content-center">
               <div class="col col-sm-12">
                 <!-- START OF CONTENT -->
-                <h1 class="display-6">
-                  <i class="bi bi-file-earmark-bar-graph"></i> Reports
-                </h1>
+                <h1 class="display-6"><i class="bi bi-file-earmark-bar-graph"></i> Reports</h1>
                 <hr />
                 <span><strong><%= start %> // <%= end %></strong></span>
                 <div class="table-responsive">
@@ -21,15 +19,10 @@
                       <tr>
                         <th scope="col"><mark>Members</mark></th>
                         <% for(let i=0; i < tableHeaders.length; i++) { %>
-                        <th
-                          scope="col"
-                          class="<%= `bg-${tableHeaders[i].color}` %>"
-                        >
+                        <th scope="col" class="<%= `bg-${tableHeaders[i].color}` %>">
                           <div class="d-flex flex-column align-items-center">
                             <span><%= tableHeaders[i].number %></span>
-                            <small class="fw-normal"
-                              ><%= tableHeaders[i].name %></small
-                            >
+                            <small class="fw-normal"><%= tableHeaders[i].name %></small>
                           </div>
                           %>
                         </th>
@@ -40,8 +33,7 @@
                       <% for(const name of Object.keys(attendance).sort()) { %>
                       <tr>
                         <th scope="row"><%= name %></th>
-                        <% for(const day of
-                        Object.keys(attendance[name]).sort()) { %>
+                        <% for(const day of Object.keys(attendance[name]).sort()) { %>
                         <td
                           class="text-center text-light bg-<%= `${attendance[name][day].color}` %>"
                           data-bs-toggle="tooltip"
@@ -56,15 +48,12 @@
                     </tbody>
                   </table>
                 </div>
-                <div
-                  class="alert alert-warning d-flex align-items-center"
-                  role="alert"
-                >
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
                   <strong><i class="bi bi-stopwatch-fill pe-1"></i></strong>
                   <div>
                     This report was last updated,
-                    <strong><%= created %></strong> and it may take 3 days for
-                    it to be recalculated.
+                    <strong><%= created %></strong> and it may take 3 days for it to be
+                    recalculated.
                   </div>
                 </div>
                 <!-- END OF CONTENT -->

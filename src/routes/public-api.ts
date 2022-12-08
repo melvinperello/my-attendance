@@ -1,10 +1,5 @@
-import {
-  check,
-  register,
-  login,
-  saveSubscription,
-  sendNotification,
-} from "../fun";
+import { check, register, login, saveSubscription, sendNotification } from "../fun";
+import { createCookieExpiration } from "../utils";
 
 const { MA_SEC_VAPID_PUBLIC_KEY } = process.env;
 
@@ -41,12 +36,30 @@ const publicApi = async (pub: any, opts: any) => {
     if (data.code === 200 && data.message === "ok") {
       const token = await reply.jwtSign({ username, group, role });
 
-      reply.code(data.code).send({
-        ...data,
-        data: {
-          token,
-        },
-      });
+      reply
+        .code(data.code)
+        .cookie("token", token, {
+          path: "/",
+          secure: true,
+          signed: true,
+          httpOnly: true,
+          sameSite: true,
+          expires: createCookieExpiration(15),
+        })
+        .cookie("last_logged", username, {
+          path: "/",
+          secure: true,
+          signed: true,
+          httpOnly: true,
+          sameSite: true,
+          expires: createCookieExpiration(43200), // 1month
+        })
+        .send({
+          ...data,
+          data: {
+            token,
+          },
+        });
     } else {
       reply.code(data.code).send(data);
     }
