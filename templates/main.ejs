@@ -20,20 +20,8 @@
                     </h6>
                     <div class="d-flex gap-3">
                       <a href="<%= `/main/supervisor/reports` %>" class="btn btn-primary">
-                        <i class="bi bi-file-earmark-bar-graph"></i> Reports
+                        📊 Reports
                       </a>
-                      <!-- <button
-                        type="button"
-                        class="btn btn-outline-primary flex-grow-1"
-                      >
-                        <i class="bi bi-megaphone"></i> Carousel
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary flex-grow-1"
-                      >
-                        <i class="bi bi-unlock"></i> Reset
-                      </button> -->
                     </div>
                   </div>
                 </div>
@@ -55,7 +43,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
                   >
-                    <i class="bi bi-calendar2-check"></i> Present
+                    ☑️ Present
                   </button>
                   <hr />
                   <button
@@ -66,7 +54,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
                   >
-                    <i class="bi bi-bandaid"></i> Sick Leave
+                    😷 Sick Leave
                   </button>
                   <button
                     disabled
@@ -76,7 +64,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
                   >
-                    <i class="bi bi-activity"></i> Emergency Leave
+                    🏥 Emergency Leave
                   </button>
                 </div>
                 <% } else { %>
@@ -88,36 +76,30 @@
                 <div class="card text-white bg-success mb-3">
                   <div class="card-header"><%= label %></div>
                   <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-calendar2-check"></i> <%= status %></h5>
-                    <p class="card-text">
-                      <i class="bi bi-alarm"></i> <strong><%= timein %></strong>
-                    </p>
+                    <h5 class="card-title">☑️ <%= status %></h5>
+                    <p class="card-text">⌚ <strong><%= timein %></strong></p>
                   </div>
                 </div>
                 <% } else if (status === "SICK_LEAVE") { %>
                 <div class="card text-white bg-dark mb-3">
                   <div class="card-header"><%= label %></div>
                   <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-bandaid"></i> <%= status %></h5>
-                    <p class="card-text">
-                      <i class="bi bi-alarm"></i> <strong><%= timein %></strong>
-                    </p>
+                    <h5 class="card-title">😷 <%= status %></h5>
+                    <p class="card-text">⌚ <strong><%= timein %></strong></p>
                   </div>
                 </div>
                 <% } else if (status === "EMERGENCY_LEAVE") { %>
                 <div class="card text-white bg-danger mb-3">
                   <div class="card-header"><%= label %></div>
                   <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-activity"></i> <%= status %></h5>
-                    <p class="card-text">
-                      <i class="bi bi-alarm"></i> <strong><%= timein %></strong>
-                    </p>
+                    <h5 class="card-title">🏥 <%= status %></h5>
+                    <p class="card-text">⌚ <strong><%= timein %></strong></p>
                   </div>
                 </div>
                 <% } %>
                 <!-- TIME CARD END -->
                 <!-- TIME TABLE -->
-                <h6 class="display-6"><i class="bi bi-person-lines-fill"></i> Team</h6>
+                <h6 class="display-6">⌛ Team</h6>
                 <table class="table table-bordered">
                   <thead>
                     <tr>
@@ -155,7 +137,7 @@
 
                 <!--  -->
                 <hr />
-                <h6 class="display-6"><i class="bi bi-cloud-sun-fill"></i> Feed</h6>
+                <h6 class="display-6">📰 Feed</h6>
                 <%- include('./partials/news.ejs',{data:feed}) -%>
                 <!--  -->
               </div>
