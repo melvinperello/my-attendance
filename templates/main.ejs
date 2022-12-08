@@ -7,6 +7,7 @@
       <div class="container mt-3">
         <div class="card">
           <div class="card-body">
+            <div></div>
             <div class="row justify-content-center">
               <div class="col col-sm-12 col-md-6">
                 <!--  -->
@@ -113,7 +114,7 @@
                 <% } %>
                 <!-- TIME CARD END -->
                 <!-- TIME TABLE -->
-                <h6 class="display-6"><i class="bi bi-cup-hot"></i> Team</h6>
+                <h6 class="display-6"><i class="bi bi-person-lines-fill"></i> Team</h6>
                 <table class="table table-bordered">
                   <thead>
                     <tr>
@@ -147,6 +148,12 @@
                 </table>
                 <!-- TIME TABLE END  -->
                 <% } %>
+                <!--  -->
+
+                <!--  -->
+                <hr />
+                <h6 class="display-6"><i class="bi bi-cloud-sun-fill"></i> Feed</h6>
+                <%- include('./partials/news.ejs',{data:feed}) -%>
                 <!--  -->
               </div>
             </div>
