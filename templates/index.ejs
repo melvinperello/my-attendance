@@ -23,7 +23,9 @@
                     />
                   </div>
                   <div class="d-grid gap-2">
-                    <button id="btn_submit" type="submit" class="btn btn-primary">login</button>
+                    <button disabled id="btn_submit" type="submit" class="btn btn-primary">
+                      login
+                    </button>
                   </div>
                 </form>
                 <!--  -->
@@ -45,6 +47,6 @@
       </div>
     </main>
     <%- include('./partials/js-lib.ejs') -%>
-    <script src="/public/js/index.js"></script>
+    <script defer src="/public/js/index.js"></script>
   </body>
 </html>

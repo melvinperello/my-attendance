@@ -48,6 +48,7 @@
                 </div>
                 <div class="d-grid gap-2" data-toggle="modal" data-target="#exampleModal">
                   <button
+                    disabled
                     id="btn_present"
                     class="btn btn-success btn-lg"
                     type="button"
@@ -58,6 +59,7 @@
                   </button>
                   <hr />
                   <button
+                    disabled
                     id="btn_sl"
                     class="btn btn-dark btn-lg"
                     type="button"
@@ -67,6 +69,7 @@
                     <i class="bi bi-bandaid"></i> Sick Leave
                   </button>
                   <button
+                    disabled
                     id="btn_el"
                     class="btn btn-danger btn-lg"
                     type="button"
@@ -202,6 +205,6 @@
     </div>
 
     <%- include('./partials/js-lib.ejs') -%>
-    <script src="/public/js/main.js"></script>
+    <script defer src="/public/js/main.js"></script>
   </body>
 </html>

@@ -1,4 +1,8 @@
 $(function () {
+  $("#btn_present").prop("disabled", false);
+  $("#btn_sl").prop("disabled", false);
+  $("#btn_el").prop("disabled", false);
+
   $("#lbl_date").text(moment().format("MMMM DD, YYYY"));
   $("#lbl_time").text(moment().format("h:mm a"));
   const timer = setInterval(function () {

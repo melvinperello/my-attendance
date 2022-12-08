@@ -1,4 +1,6 @@
 $(function () {
+  $("#btn_submit").prop("disabled", false);
+
   $("#msg_not_exists").css("visibility", "hidden");
   $("#frm_login").submit(async function (event) {
     event.preventDefault();

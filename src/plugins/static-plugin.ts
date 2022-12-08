@@ -9,17 +9,19 @@ const staticPlugin = async (fastify: any) => {
     maxAge: isGCP() ? 60000 * 60 * 24 : 0,
   });
 
+  const jsCache = isGCP() ? `public, max-age=${60000 * 60}` : "no-store";
+
   //------------------------------------------------
   // JS Files are frequesntly updated
   // If old files are cached it may cause a different behavior
   //------------------------------------------------
   fastify.get("/sw.js", async function (req: any, reply: any) {
-    return reply.header("Cache-Control", "no-store").sendFile("sw.js", "public/js");
+    return reply.header("Cache-Control", jsCache).sendFile("sw.js", "public/js");
   });
 
   fastify.get("/public/js/:js", function (req: any, reply: any) {
     const { js } = req.params;
-    reply.header("Cache-Control", "no-store").sendFile(js, "public/js"); // overriding the options disabling cache-control headers
+    reply.header("Cache-Control", jsCache).sendFile(js, "public/js"); // overriding the options disabling cache-control headers
   });
 };
 
