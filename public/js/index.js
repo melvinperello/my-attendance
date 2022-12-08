@@ -1,7 +1,6 @@
 $(function () {
   $("#btn_submit").prop("disabled", false);
 
-  $("#msg_not_exists").css("visibility", "hidden");
   $("#frm_login").submit(async function (event) {
     event.preventDefault();
     $("#btn_submit").prop("disabled", true);
@@ -33,7 +32,7 @@ $(function () {
       })
       .fail(function (xhr) {
         if (xhr.status === 404) {
-          $("#msg_not_exists").css("visibility", "visible");
+          $("#msg_not_exists").prop("hidden", false);
         } else if (xhr.status === 400) {
           window.location.href = "/login/" + xhr.responseJSON.data.username;
         }
