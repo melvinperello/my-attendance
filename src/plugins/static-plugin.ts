@@ -9,7 +9,7 @@ const staticPlugin = async (fastify: any) => {
     maxAge: isGCP() ? 60000 * 60 * 24 : 0,
   });
 
-  const jsCache = isGCP() ? `public, max-age=${60000 * 60}` : "no-store";
+  const jsCache = isGCP() ? `public, max-age=${60 * 60}` : "no-store";
 
   //------------------------------------------------
   // JS Files are frequesntly updated
