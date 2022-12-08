@@ -34,6 +34,25 @@ export const saveSubscription = async (subscription: {
   };
 };
 
+export const getFeed = async () => {
+  const collectionReference = firestore.collection("feed");
+  const feeds = await collectionReference.orderBy("time", "desc").get();
+  const feed = feeds.docs.map((d: any) => {
+    const data = d.data();
+    return {
+      ...data,
+      id: d.id,
+      time: getMoment(data.time.toDate()).fromNow(),
+    };
+  });
+
+  return {
+    code: 200,
+    message: "ok",
+    data: feed,
+  };
+};
+
 export const sendNotification = async (message: string) => {
   const collectionReference = firestore.collection("push");
   const subscriptions = await collectionReference.get();

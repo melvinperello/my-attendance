@@ -1,9 +1,17 @@
-import { checkAttendance, groupie } from "../fun";
+import { checkAttendance, getFeed, groupie } from "../fun";
 
 const privateRoute = async (pri: any, opts: any) => {
   pri.get("/", async (request: any, reply: any) => {
     const { username, group, role } = request.user;
     const data = await checkAttendance(username, group);
+    const feed = await getFeed();
+
+    let feedData = [];
+
+    if (feed.code === 200) {
+      feedData = feed.data;
+    }
+
     if (data.code === 200) {
       // get all attendance
       const myGroupie = await groupie(group);
@@ -15,6 +23,7 @@ const privateRoute = async (pri: any, opts: any) => {
         role,
         username: username,
         tableData: myGroupie.data,
+        feed: feedData,
       });
     } else {
       return reply.view("/templates/main.ejs", {
@@ -25,6 +34,7 @@ const privateRoute = async (pri: any, opts: any) => {
         role,
         username: username,
         tableData: [],
+        feed: feedData,
       });
     }
   });
