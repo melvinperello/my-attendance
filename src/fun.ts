@@ -3,7 +3,7 @@ import QRCode from "qrcode";
 import moment from "moment-timezone";
 import { extendMoment } from "moment-range";
 import sha256 from "crypto-js/sha256";
-const { MA_TIMEZONE } = process.env;
+const { MA_TIMEZONE, MA_APP_NAME } = process.env;
 const { Firestore, Timestamp } = require("@google-cloud/firestore");
 const firestore = new Firestore();
 // @ts-expect-error this is an extension of moment
@@ -47,10 +47,7 @@ export const sendNotification = async (message: string) => {
   const pushResult = [];
   for (const endpoint of subscriptionsData) {
     try {
-      const result: any = await webpush.sendNotification(
-        endpoint,
-        message || "Test Message"
-      );
+      const result: any = await webpush.sendNotification(endpoint, message || "Test Message");
       pushResult.push({
         code: result.statusCode,
         result: result.body,
@@ -129,11 +126,7 @@ const updateAuthDoc = async (username: string, data: any) => {
 // ----------------------------------------------------
 // Service Functions.
 // ----------------------------------------------------
-export const logAttendance = async (
-  username: string,
-  group: string,
-  status: string
-) => {
+export const logAttendance = async (username: string, group: string, status: string) => {
   const timein = getMoment().format("HH:mm");
   const docName = getCurrentAttendancePath(group, username);
 
@@ -193,9 +186,7 @@ export const checkAttendance = async (username: string, group: string) => {
 };
 
 export const groupie = async (group: string) => {
-  const collectionReference = firestore.collection(
-    getGroupCurrentAttendancePath(group)
-  );
+  const collectionReference = firestore.collection(getGroupCurrentAttendancePath(group));
   const attendances = await collectionReference.orderBy("timein").get();
   const attendancesData = attendances.docs.map((d: any) => {
     const thisDocData = d.data();
@@ -347,7 +338,7 @@ export const preRegister = async (username: string) => {
     secret: secret,
     verified: false,
   });
-  const otpauth = authenticator.keyuri(username, "ur-attendance", secret);
+  const otpauth = authenticator.keyuri(username, MA_APP_NAME || "app", secret);
   const qrCode = await QRCode.toDataURL(otpauth, {
     errorCorrectionLevel: "H",
     width: 200,
@@ -367,11 +358,7 @@ export const preRegister = async (username: string) => {
 // ----------------------------------------------------
 // Reporting Functions.
 // ----------------------------------------------------
-export const generateReport = async (
-  start: string,
-  end: string,
-  group: string
-) => {
+export const generateReport = async (start: string, end: string, group: string) => {
   // create the report range.
   const momentStart = getMoment(start);
   const momentEnd = getMoment(end);
@@ -405,10 +392,7 @@ export const generateReport = async (
   // -----------------------------------------------
   const savedReport = await getDoc(`reports/${start}-${end}-${group}`);
   if (savedReport) {
-    console.log(
-      "[Important] Accessing saved reports for: " +
-        `reports/${start}-${end}-${group}`
-    );
+    console.log("[Important] Accessing saved reports for: " + `reports/${start}-${end}-${group}`);
     const { attendance, tableHeaders, created } = savedReport.data();
     return {
       code: 200,
@@ -459,9 +443,7 @@ export const generateReport = async (
     // -----------------------------------------------
     // Query the DB for values.
     // -----------------------------------------------
-    const queryReference = firestore.collection(
-      `/attendance/${day.format("YYYY-MM-DD")}/core`
-    );
+    const queryReference = firestore.collection(`/attendance/${day.format("YYYY-MM-DD")}/core`);
     // get the results.
     const queryData = await queryReference.get();
     // iterate the results and construct the members value.
@@ -531,9 +513,7 @@ export const generateReport = async (
     created: Timestamp.fromDate(new Date()),
   });
 
-  console.log(
-    "[Important] Reports Created for: " + `reports/${start}-${end}-${group}`
-  );
+  console.log("[Important] Reports Created for: " + `reports/${start}-${end}-${group}`);
 
   return {
     code: 200,
@@ -542,7 +522,7 @@ export const generateReport = async (
   };
 };
 
-export const createReportSelector = async (token: string) => {
+export const createReportSelector = async () => {
   const today: number = parseInt(getMoment().format("D"));
   if (today <= 15) {
     // 1-15 PERIOD 1
@@ -551,15 +531,12 @@ export const createReportSelector = async (token: string) => {
 
     // previous period
     const pStart = getMoment().subtract(1, "month").format("YYYY-MM-16");
-    const pEnd = getMoment()
-      .subtract(1, "month")
-      .endOf("month")
-      .format("YYYY-MM-DD");
+    const pEnd = getMoment().subtract(1, "month").endOf("month").format("YYYY-MM-DD");
 
     return {
       code: 200,
       message: "ok",
-      data: { start, end, pStart, pEnd, token },
+      data: { start, end, pStart, pEnd },
     };
   } else if (today > 15) {
     // 16 - last PERIOD 2
@@ -572,7 +549,7 @@ export const createReportSelector = async (token: string) => {
     return {
       code: 200,
       message: "ok",
-      data: { start, end, pStart, pEnd, token },
+      data: { start, end, pStart, pEnd },
     };
   }
 };

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/head.ejs',{title:"our-attendance - Login"}) -%>
+  <%- include('./partials/head.ejs',{title:process.env.MA_APP_NAME + " - Login"}) -%>
   <body>
     <%- include('./partials/nav.ejs') -%>
     <main>
@@ -12,9 +12,7 @@
                 <!--  -->
                 <form id="frm_login">
                   <div class="mb-3">
-                    <label for="txt_username" class="form-label"
-                      >username</label
-                    >
+                    <label for="txt_username" class="form-label">username</label>
                     <input
                       readonly
                       value="<%= username %>"
@@ -43,13 +41,7 @@
                     </div>
                   </div>
                   <div class="d-grid gap-2">
-                    <button
-                      id="btn_submit"
-                      type="submit"
-                      class="btn btn-primary"
-                    >
-                      login
-                    </button>
+                    <button id="btn_submit" type="submit" class="btn btn-primary">login</button>
                   </div>
                 </form>
                 <!--  -->

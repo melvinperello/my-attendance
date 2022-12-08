@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/head.ejs',{title:"our-attendance - Main"}) -%>
+  <%- include('./partials/head.ejs',{title:process.env.MA_APP_NAME + " - Main"}) -%>
   <body>
     <%- include('./partials/nav.ejs') -%>
     <main>
@@ -18,10 +18,7 @@
                       You have now access to admin tools
                     </h6>
                     <div class="d-flex gap-3">
-                      <a
-                        href="<%= `/main/supervisor/reports?token=${token}` %>"
-                        class="btn btn-primary"
-                      >
+                      <a href="<%= `/main/supervisor/reports` %>" class="btn btn-primary">
                         <i class="bi bi-file-earmark-bar-graph"></i> Reports
                       </a>
                       <!-- <button
@@ -46,14 +43,9 @@
 
                 <%if (code !== 200) { %>
                 <div class="alert alert-info text-center" role="alert">
-                  <strong>Hi <%= username %>!</strong> Please click the button
-                  with your status.
+                  <strong>Hi <%= username %>!</strong> Please click the button with your status.
                 </div>
-                <div
-                  class="d-grid gap-2"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                >
+                <div class="d-grid gap-2" data-toggle="modal" data-target="#exampleModal">
                   <button
                     id="btn_present"
                     class="btn btn-success btn-lg"
@@ -85,17 +77,14 @@
                 </div>
                 <% } else { %>
                 <div class="alert alert-info text-center" role="alert">
-                  <strong>Hi <%= username %>!</strong> You have already logged
-                  your attendance.
+                  <strong>Hi <%= username %>!</strong> You have already logged your attendance.
                 </div>
                 <!-- TIME CARD -->
                 <% if (status === "PRESENT") { %>
                 <div class="card text-white bg-success mb-3">
                   <div class="card-header"><%= label %></div>
                   <div class="card-body">
-                    <h5 class="card-title">
-                      <i class="bi bi-calendar2-check"></i> <%= status %>
-                    </h5>
+                    <h5 class="card-title"><i class="bi bi-calendar2-check"></i> <%= status %></h5>
                     <p class="card-text">
                       <i class="bi bi-alarm"></i> <strong><%= timein %></strong>
                     </p>
@@ -105,9 +94,7 @@
                 <div class="card text-white bg-dark mb-3">
                   <div class="card-header"><%= label %></div>
                   <div class="card-body">
-                    <h5 class="card-title">
-                      <i class="bi bi-bandaid"></i> <%= status %>
-                    </h5>
+                    <h5 class="card-title"><i class="bi bi-bandaid"></i> <%= status %></h5>
                     <p class="card-text">
                       <i class="bi bi-alarm"></i> <strong><%= timein %></strong>
                     </p>
@@ -117,9 +104,7 @@
                 <div class="card text-white bg-danger mb-3">
                   <div class="card-header"><%= label %></div>
                   <div class="card-body">
-                    <h5 class="card-title">
-                      <i class="bi bi-activity"></i> <%= status %>
-                    </h5>
+                    <h5 class="card-title"><i class="bi bi-activity"></i> <%= status %></h5>
                     <p class="card-text">
                       <i class="bi bi-alarm"></i> <strong><%= timein %></strong>
                     </p>
@@ -143,9 +128,7 @@
                     <tr class="table-<%= tableData[i].label %>">
                       <th scope="row"><%= i + 1 %></th>
                       <td>
-                        <div
-                          class="d-flex flex-row flex gap-1 align-items-center"
-                        >
+                        <div class="d-flex flex-row flex gap-1 align-items-center">
                           <div class="x-avatar-container">
                             <img
                               class="img-responsive"
@@ -197,13 +180,7 @@
             <mark><strong id="lbl_selected">--</strong></mark>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-danger"
-              data-bs-dismiss="modal"
-            >
-              No
-            </button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
             <button
               id="btn_attendance_confirm"
               data-bs-dismiss="modal"

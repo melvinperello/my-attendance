@@ -1,7 +1,31 @@
 import { check, preRegister } from "../fun";
 
 const publicRoute = async (pub: any, opts: any) => {
+  pub.addHook("onRequest", async (request: any, reply: any) => {
+    try {
+      const { valid, renew } = reply.unsignCookie(request.cookies.token);
+      if (valid && !renew) {
+        return reply.redirect("/main");
+      }
+    } catch {
+      // no-op
+    }
+  });
+
   pub.get("/", async (request: any, reply: any) => {
+    try {
+      const {
+        valid: lastLoggedValid,
+        renew: lastLoggedRenew,
+        value: lastLoggedValue,
+      } = reply.unsignCookie(request.cookies.last_logged);
+      if (lastLoggedValid && !lastLoggedRenew) {
+        return reply.redirect("/login/" + lastLoggedValue);
+      }
+    } catch {
+      // no-op
+    }
+
     return reply.view("/templates/index.ejs");
   });
 

@@ -22,14 +22,8 @@ $(function () {
     $("#btn_sl").prop("disabled", true);
     $("#btn_el").prop("disabled", true);
     const selected = $("#lbl_selected").text();
-    const token = $.cookie("token");
-    if (!token) {
-      window.location.href = "/";
-      return;
-    }
     $.ajax({
       url: "/main/api/attendance",
-      headers: { Authorization: "Bearer " + token },
       type: "POST",
       data: JSON.stringify({
         selected: selected,

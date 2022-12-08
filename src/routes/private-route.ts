@@ -1,30 +1,8 @@
 import { checkAttendance, groupie } from "../fun";
 
 const privateRoute = async (pri: any, opts: any) => {
-  pri.addHook("onRequest", async (request: any, reply: any) => {
-    const qsToken = request.query.token;
-    try {
-      if (qsToken) {
-        try {
-          await pri.jwt.verify(qsToken);
-        } catch (ex: any) {
-          if (ex.code === "FAST_JWT_EXPIRED") {
-            const { username } = pri.jwt.decode(qsToken);
-            reply.redirect("/login/" + username + "?message=expired");
-          } else {
-            throw ex;
-          }
-        }
-      } else {
-        await request.jwtVerify();
-      }
-    } catch (err) {
-      reply.send(err);
-    }
-  });
-
   pri.get("/", async (request: any, reply: any) => {
-    const { username, group, role } = pri.jwt.decode(request.query.token);
+    const { username, group, role } = request.user;
     const data = await checkAttendance(username, group);
     if (data.code === 200) {
       // get all attendance
@@ -37,7 +15,6 @@ const privateRoute = async (pri: any, opts: any) => {
         role,
         username: username,
         tableData: myGroupie.data,
-        token: request.query.token,
       });
     } else {
       return reply.view("/templates/main.ejs", {
@@ -48,7 +25,6 @@ const privateRoute = async (pri: any, opts: any) => {
         role,
         username: username,
         tableData: [],
-        token: request.query.token,
       });
     }
   });

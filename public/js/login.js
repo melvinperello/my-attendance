@@ -1,8 +1,4 @@
 $(function () {
-  const token = $.cookie("token");
-  if (token) {
-    window.location.href = "/main?token=" + token;
-  }
   $("#msg_not_exists").css("visibility", "hidden");
   $("#frm_login").submit(async function (event) {
     event.preventDefault();
@@ -41,11 +37,7 @@ $(function () {
       dataType: "json",
     })
       .done(function (res) {
-        const date = new Date();
-        const minutes = 15;
-        date.setTime(date.getTime() + minutes * 60 * 1000);
-        $.cookie("token", res.data.token, { expires: date, path: "/" });
-        window.location.href = "/main?token=" + res.data.token;
+        window.location.href = "/main";
       })
       .fail(function (xhr) {
         $("#msg_not_exists").css("visibility", "visible");

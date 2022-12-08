@@ -18,3 +18,9 @@ const { K_SERVICE } = process.env;
 export const isGCP = () => {
   return K_SERVICE;
 };
+
+export const createCookieExpiration = (minutes: number) => {
+  const cookieExpiration = new Date();
+  cookieExpiration.setTime(cookieExpiration.getTime() + minutes * 60 * 1000);
+  return cookieExpiration;
+};
