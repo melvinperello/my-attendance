@@ -54,6 +54,13 @@ export const getFeed = async () => {
 };
 
 export const sendNotification = async (message: string) => {
+  if (!message) {
+    return {
+      code: 400,
+      message: "no_push_message",
+      data: null,
+    };
+  }
   const collectionReference = firestore.collection("push");
   const subscriptions = await collectionReference.get();
   const subscriptionsData = subscriptions.docs.map((d: any) => {
