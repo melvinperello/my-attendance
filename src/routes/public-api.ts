@@ -1,7 +1,7 @@
 import { check, register, login, saveSubscription, sendNotification } from "../fun";
 import { createCookieExpiration } from "../utils";
 
-const { MA_SEC_VAPID_PUBLIC_KEY } = process.env;
+const { MA_SEC_VAPID_PUBLIC_KEY, MA_SEC_PUSH_TOKEN } = process.env;
 
 const publicApi = async (pub: any, opts: any) => {
   pub.get("/push-public-key", async (request: any, reply: any) => {
@@ -16,8 +16,24 @@ const publicApi = async (pub: any, opts: any) => {
     return reply.code(data.code).send(data);
   });
 
-  pub.get("/send-notification", async (request: any, reply: any) => {
-    const { message } = request.query;
+  pub.post("/send-notification", async (request: any, reply: any) => {
+    const { message } = request.body;
+    const pushToken = request.headers["x-push-token"];
+    if (!pushToken) {
+      return reply.code(401).send({
+        code: 401,
+        message: "no_push_token",
+        data: null,
+      });
+    }
+    if (pushToken !== MA_SEC_PUSH_TOKEN) {
+      return reply.code(403).send({
+        code: 403,
+        message: "wrong_push_token",
+        data: null,
+      });
+    }
+
     const data = await sendNotification(message);
     return reply.code(data.code).send(data);
   });
