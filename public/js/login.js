@@ -1,5 +1,5 @@
 $(function () {
-  $("#msg_not_exists").css("visibility", "hidden");
+  $("#btn_submit").prop("disabled", false);
   $("#frm_login").submit(async function (event) {
     event.preventDefault();
 
@@ -40,7 +40,7 @@ $(function () {
         window.location.href = "/main";
       })
       .fail(function (xhr) {
-        $("#msg_not_exists").css("visibility", "visible");
+        $("#msg_not_exists").prop("hidden", false);
         $("#btn_submit").prop("disabled", false);
       });
   });

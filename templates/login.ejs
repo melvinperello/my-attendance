@@ -44,20 +44,20 @@
                     </div>
                   </div>
                   <div class="d-grid gap-2">
-                    <button id="btn_submit" type="submit" class="btn btn-primary">login</button>
+                    <button disabled id="btn_submit" type="submit" class="btn btn-primary">
+                      login
+                    </button>
                   </div>
                 </form>
                 <!--  -->
               </div>
             </div>
             <!--  -->
-            <div
-              id="msg_not_exists"
-              class="alert alert-danger d-flex align-items-center mt-2"
-              role="alert"
-            >
-              <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
-              <div>Wrong code.</div>
+            <div hidden id="msg_not_exists">
+              <div class="alert alert-danger d-flex align-items-center mt-2" role="alert">
+                ⚠️
+                <div>Wrong code.</div>
+              </div>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
     </main>
 
     <%- include('./partials/js-lib.ejs') -%>
-    <script src="/public/js/push.js"></script>
-    <script src="/public/js/login.js"></script>
+    <script defer src="/public/js/push.js"></script>
+    <script defer src="/public/js/login.js"></script>
   </body>
 </html>

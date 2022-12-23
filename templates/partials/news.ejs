@@ -2,7 +2,7 @@
 
 <% for(let i=0; i < data.length; i++) { %>
 <div class="card mb-3">
-  <img src="<%= `${data[i].img}`%>" class="card-img-top" alt="..." />
+  <img loading="lazy" src="<%= `${data[i].img}`%>" class="card-img-top" alt="..." />
   <div class="card-body">
     <h5 class="card-title"><%= data[i].title %></h5>
     <p class="card-text"><%= data[i].text %></p>
